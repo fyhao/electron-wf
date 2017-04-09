@@ -488,7 +488,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 				});
 			}
 			else {
-				process.nextTick(checkNext);
+				// TODO TEMP
+				stepModule.processStep({}, step, checkNext);
 			}
 		}
 	} // end next
@@ -532,6 +533,11 @@ var loadPlugins = function(config) {
 		});
 	}
 }
+
+
+// BOOTSTRAPPING STEP MODULE
+var stepModule = require('./step.js');
+stepModule.bootstrap();
 
 module.exports.reloadConfig = function() {
 	loadConfig(lastConfigFile);

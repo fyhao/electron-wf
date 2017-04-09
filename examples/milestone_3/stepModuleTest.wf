@@ -1,0 +1,43 @@
+
+module.exports = {
+	
+	"db" : {
+		"testdb" : {
+			user:'test',
+			password:'test',
+			server : 'localhost\\sqlserver2012',
+			database : 'cbp'
+		}
+	}
+	
+	,
+	workFlows : {
+		PerformWork : {
+			showInMenu:true,
+			steps : [
+				{type:'setVar',name:'a',value:1},
+				{type:'log', log:'setVar will see [1] -> [##a##]'},
+				{type:'incrementVar',name:'a'},
+				{type:'log', log:'incrementVar will see [2] -> [##a##]'},
+				{type:'evaljs',var:'dt',code:'new Date().toString()'},
+				{type:'exec',cmd:'echo "##dt##" > date.txt'},
+				{type:'Sub',input:'some input'},
+				{type:'SubAll',input:'some input',inputall:true,outputall:true},
+				{type:'SubAllTest',input:'some input',inputall:true,outputall:true},
+				{type:'setVarTest',name:'a',value:3},
+				{type:'log', log:'setVar will see [3] -> [##a##]'},
+			]
+		}
+		,
+		Sub : {
+			steps : [
+				{type:'log',log:'Sub input ##input##'}
+			]
+		},
+		SubAll : {
+			steps : [
+				{type:'log',log:'SubAll input ##input## a ##a##'}
+			]
+		}
+	}
+}
