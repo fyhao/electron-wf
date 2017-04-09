@@ -47,6 +47,15 @@ var getStringBetween = function(chunk, startkey, endkey) {
 	}
 	return null;
 }
+var isOnlyOneVariable = function(c) {
+	if(c.indexOf('##') == 0 && c.lastIndexOf('##') == c.length - 2) {
+		var test = getStringBetween(c, '##','##')
+		if(test.length == c.length - 4) {
+			return true;
+		}
+	}
+	return false;
+}
 var initTestDataPrep = function(cfg, donefn) {
 	var excelFile = cfg.testDataExcelFile;
 	var workbook = new Excel.Workbook();
@@ -205,8 +214,14 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 	}
 	var replaceVars = function(c) {
-		for(var k in vars) {
-			c = replaceAll(c, '##' + k + '##', vars[k]);
+		if(isOnlyOneVariable(c)) {
+			var varName = getStringBetween(c, '##','##')
+			c = vars[varName]
+		}
+		else {
+			for(var k in vars) {
+				c = replaceAll(c, '##' + k + '##', vars[k]);
+			}
 		}
 		return c;
 	}
