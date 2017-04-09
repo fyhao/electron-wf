@@ -1,0 +1,187 @@
+<!doctype html>
+<html ng-app="ui.editor">
+  <head>
+    <script src="static/js/angular.js"></script>
+    <script src="static/js/angular-animate.js"></script>
+    <script src="static/js/angular-sanitize.js"></script>
+    <script src="static/js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="static/js/editor.js"></script>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+editor window
+  <div ng-controller="EditorCtrl">
+	<div ng-if="showEditDBForm === true">
+		<h2>Edit DB Info</h2>
+		<h3>{{editDBForm.dbname}}</h3>
+		user: <input type="text" ng-model="editDBForm.item.user" /><br />
+		password: <input type="text" ng-model="editDBForm.item.password" /><br />
+		server: <input type="text" ng-model="editDBForm.item.server" /><br />
+		database: <input type="text" ng-model="editDBForm.item.database" /><br />
+		<button id="savebtn" ng-click="saveDBForm()">Save</button>
+	</div>
+	
+	
+	
+	<div ng-if="showEditWFForm === true">
+		<h2>Edit Workflow</h2>
+		<h3>{{editWFForm.key}}</h3>
+		<table border="1">
+			<tr><td colspan="2"><button id="saveWFBtn" ng-click="saveWFForm()">Save</button></td></tr>
+			<tr><td>Show In Menu?</td><td><input type="checkbox" ng-model="editWFForm.item.showInMenu" /></td></tr>
+			<tr><td colspan="2">Steps ({{editWFForm.item.steps.length}})</td></tr>
+			<tr ng-repeat="step in editWFForm.item.steps">
+				<td>Type: {{step.type}} 
+				<button ng-click="deleteStep(step)">Delete Step</button>
+				<button ng-click="addStep(step)">Add</button>
+				<select ng-if="step.isAddStepForm == true" ng-model="step.newType">
+					<option ng-repeat="type in types" value="{{type}}">{{type}}</option>
+				</select>
+				<button ng-click="saveAddStep(step)" ng-if="step.isAddStepForm == true">Save</button>
+				<button ng-click="moveStepUp(step)">Up</button>
+				<button ng-click="moveStepDown(step)">Down</button>
+				</td>
+				<td>
+					<div ng-if="step.type == 'log'">
+					<input type="text" ng-model="step.log" size="80" />
+					</div>
+					<div ng-if="step.type == 'sql'">
+						<table border="1">
+							<tr><td>SQL</td><td>
+							<input type="text" ng-model="step.sql" size="80" />
+							</td></tr>
+							<tr><td>DataSource</td><td>
+								{{step.ds}}
+							<select ng-model="step.ds">
+								<option ng-repeat="ds in dsList" value="{{ds}}">{{ds}}</option>
+							</select>
+							</td></tr>
+							<tr><td>RecordSets</td>
+							<td>
+							<ul ng-if="step.recordsets.length > 0">
+								<li ng-repeat="rs in step.recordsets">{{rs}} <button ng-click="deleteRecordset(step, rs)">Delete {{rs}}</button></li>
+							</ul>
+							<input type="text" ng-model="step.newRecordset" /><button ng-click="addRecordset(step)">Add</button>
+							</td>
+							</tr>
+						</table>
+					</div>
+					
+					<div ng-if="step.type == 'exec'">
+						cmd: <input type="text" ng-model="step.cmd" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'setVar'">
+						name: <input type="text" ng-model="step.name" size="80" /><br />
+						value: <input type="text" ng-model="step.value" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'incrementVar'">
+						name: <input type="text" ng-model="step.name" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'replaceAll'">
+						var: <input type="text" ng-model="step.var" size="80" /><br />
+						source: <input type="text" ng-model="step.source" size="80" /><br />
+						from: <input type="text" ng-model="step.from" size="80" /><br />
+						to: <input type="text" ng-model="step.to" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'if'">
+						var: <input type="text" ng-model="step.var" size="80" /><br />
+						if: <select ng-model="step.if">
+							<option value="contains">contains</option>
+							<option value="equal">equal</option>
+							<option value="eq">eq</option>
+							<option value="neq">neq</option>
+						</select><br />
+						pattern: <input type="text" ng-model="step.pattern" size="80" /><br />
+						yes_subflow: <input type="text" ng-model="step.yes_subflow" size="80" /><br />
+						yes_inputVars: 
+						<button ng-click="addYesInputVars(step)">Add</button>
+						<input type="text" ng-model="step.yesInputVar" />
+						<ul ng-if="step.yes_inputVars.length > 0">
+							<li ng-repeat="vars in step.yes_inputVars">{{vars}}
+							<button ng-click="deleteYesInputVar(step,vars)">Del</button>
+							</li>
+						</ul>
+						yes_outputVars: 
+						<button ng-click="addYesOutputVars(step)">Add</button>
+						<input type="text" ng-model="step.yesOutputVar" />
+						<ul ng-if="step.yes_outputVars.length > 0">
+							<li ng-repeat="vars in step.yes_outputVars">{{s}}
+							<button ng-click="deleteYesOutputVar(step,vars)">Del</button>
+							</li>
+						</ul>
+						no_subflow: <input type="text" ng-model="step.no_subflow" size="80" /><br />
+						no_inputVars: 
+						<button ng-click="addNoInputVars(step)">Add</button>
+						<input type="text" ng-model="step.noInputVar" />
+						<ul ng-if="step.no_inputVars.length > 0">
+							<li ng-repeat="vars in step.no_inputVars">{{vars}}
+							<button ng-click="deleteNoInputVar(step,vars)">Del</button></li>
+						</ul>
+						no_outputVars: 
+						<button ng-click="addNoOutputVars(step)">Add</button>
+						<input type="text" ng-model="step.noOutputVar" /
+						<ul ng-if="step.no_outputVars.length > 0">
+							<li ng-repeat="vars in step.no_outputVars">{{vars}}
+							<button ng-click="deleteNoOutputVar(step,vars)">Del</button>
+							</li>
+						</ul>
+					</div>
+					<div ng-if="step.type == 'testDataPrep'">
+						name: <input type="text" ng-model="step.name" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'copyFile'">
+						source: <input type="text" ng-model="step.source" size="80" /><br />
+						target: <input type="text" ng-model="step.target" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'createFolder'">
+						folder: <input type="text" ng-model="step.folder" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'deleteFolder'">
+						folder: <input type="text" ng-model="step.folder" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'deleteFile'">
+						file: <input type="text" ng-model="step.file" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'openFileRead'">
+						var: <input type="text" ng-model="step.var" size="80" /><br />
+						file: <input type="text" ng-model="step.file" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'wsread'">
+						col: <input type="text" ng-model="step.col" size="80" /><br />
+						var: <input type="text" ng-model="step.var" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'wsupdate'">
+						col: <input type="text" ng-model="step.col" size="80" /><br />
+						value: <input type="text" ng-model="step.value" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'evaljs'">
+						var: <input type="text" ng-model="step.var" size="80" /><br />
+						code: <input type="text" ng-model="step.code" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'setVar'">
+						name: <input type="text" ng-model="step.name" /><br />
+						value: <input type="text" ng-model="step.value" /><br />
+					</div>
+					<div ng-if="step.type == 'openFileWrite'">
+						name: <input type="text" ng-model="step.name" /><br />
+					</div>
+					<div ng-if="step.type == 'appendFileWrite'">
+						name: <input type="text" ng-model="step.name" /><br />
+						content: <input type="text" ng-model="step.content" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'printlnFileWrite'">
+						name: <input type="text" ng-model="step.name" /><br />
+						content: <input type="text" ng-model="step.content" size="80" /><br />
+					</div>
+					<div ng-if="step.type == 'closeFileWrite'">
+						append: <input type="checkbox" ng-model="step.append" /><br />
+						name: <input type="text" ng-model="step.name" /><br />
+						file: <input type="text" ng-model="step.file" size="80" /><br />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+  </div>
+  </body>
+</html>
