@@ -1,7 +1,7 @@
 const {app, BrowserWindow, Menu, dialog} = require('electron')
 const path = require('path')
 const url = require('url')
-var util = require('./util.js');
+var util = require('./lib/util.js');
 var cache = require('./cache.js');
 var tests = require('./tests.js');
 var editor = require('./editor.js');

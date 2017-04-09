@@ -3,60 +3,14 @@ const {app, BrowserWindow, Menu, dialog} = require('electron')
 var fs = require('fs');
 var path = require('path');
 var cp = require('child_process');
+var util = require('./lib/util.js');
 var Excel = require('exceljs');
 var sql = require('mssql');
 var xml2js = require('xml2js')
 var config = null;
 var excelFile = null;
 
-
-var replaceAll = function(s, n,v) {
-	while(s.indexOf(n) != -1) {
-		s = s.replace(n,v);
-	}
-	return s;
-}
-var fetchValue = function(ws,cell) {
-	var val = ws.getCell(cell).value;
-	if(val != null) {
-		if(val.result != null) {
-			val = val.result;
-		}
-		
-		return val;
-	}
-	return null;
-}
-var in_array = function(item, arr) {
-	var matched = false;
-	arr.forEach(function(i) {
-		if(item == i) matched = true;
-	});
-	return matched;
-}
-var getStringBetween = function(chunk, startkey, endkey) {
-	var startIndex = -1;
-	var endIndex = -1;
-	if((startIndex = chunk.indexOf(startkey)) != -1) {
-		chunk = chunk.substring(startIndex + startkey.length);
-		if((endIndex = chunk.indexOf(endkey)) != -1) {
-			return chunk.substring(0, chunk.indexOf(endkey));
-		}
-		else {
-			return null;
-		}
-	}
-	return null;
-}
-var isOnlyOneVariable = function(c) {
-	if(c.indexOf('##') == 0 && c.lastIndexOf('##') == c.length - 2) {
-		var test = getStringBetween(c, '##','##')
-		if(test.length == c.length - 4) {
-			return true;
-		}
-	}
-	return false;
-}
+ 
 var initTestDataPrep = function(cfg, donefn) {
 	var excelFile = cfg.testDataExcelFile;
 	var workbook = new Excel.Workbook();
@@ -76,15 +30,15 @@ var initTestDataPrep = function(cfg, donefn) {
 			var crm_issue_entries = [];
 			if(cfg.crm != null) {
 				crm_template = fs.readFileSync(cfg.crm_input_template).toString();
-				crm_issue_template = getStringBetween(crm_template, "##START##", "##END##");
+				crm_issue_template = util.getStringBetween(crm_template, "##START##", "##END##");
 			}
 			
 			// PROCESS EACH ROW
-			while((firstVal = fetchValue(ws, firstCell + curRow)) != null) {
+			while((firstVal = util.fetchValue(ws, firstCell + curRow)) != null) {
 				var cellData = {};
 				cfg.cells.forEach(function(c) {
-					var val = fetchValue(ws, c + curRow);
-					if(in_array(c, cfg.dateCells)) {
+					var val = util.fetchValue(ws, c + curRow);
+					if(util.in_array(c, cfg.dateCells)) {
 						var date = new Date(val);
 						if(!isNaN(date.getTime())) {
 							val = date.toISOString().substring(0, 10) + ' ' + date.toISOString().substring(11, 19);
@@ -96,7 +50,7 @@ var initTestDataPrep = function(cfg, donefn) {
 					cfg.sql_templates.forEach(function(s) {
 						for(var c in cellData) {
 							var val = cellData[c];
-							s = replaceAll(s, '##' + c + '##', val);
+							s = util.replaceAll(s, '##' + c + '##', val);
 						}
 						sql_list.push(s);
 					});
@@ -139,110 +93,10 @@ var initTestDataPrep = function(cfg, donefn) {
 		});
 	
 }
-var deleteFolderRecursive = function(path) {
-  if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
-};
-function clone(item) {
-    if (!item) { return item; } // null, undefined values check
-
-    var types = [ Number, String, Boolean ], 
-        result;
-
-    // normalizing primitives if someone did new String('aaa'), or new Number('444');
-    types.forEach(function(type) {
-        if (item instanceof type) {
-            result = type( item );
-        }
-    });
-
-    if (typeof result == "undefined") {
-        if (Object.prototype.toString.call( item ) === "[object Array]") {
-            result = [];
-            item.forEach(function(child, index, array) { 
-                result[index] = clone( child );
-            });
-        } else if (typeof item == "object") {
-            // testing that this is DOM
-            if (item.nodeType && typeof item.cloneNode == "function") {
-                var result = item.cloneNode( true );    
-            } else if (!item.prototype) { // check that this is a literal
-                if (item instanceof Date) {
-                    result = new Date(item);
-                } else {
-                    // it is an object literal
-                    result = {};
-                    for (var i in item) {
-                        result[i] = clone( item[i] );
-                    }
-                }
-            } else {
-                // depending what you would like here,
-                // just keep the reference, or create new object
-                if (false && item.constructor) {
-                    // would not advice to do that, reason? Read below
-                    result = new item.constructor();
-                } else {
-                    result = item;
-                }
-            }
-        } else {
-            result = item;
-        }
-    }
-
-    return result;
-}
-
-function copyFileSync( source, target ) {
-
-    var targetFile = target;
-
-    //if target is a directory a new file with the same name will be created
-    if ( fs.existsSync( target ) ) {
-        if ( fs.lstatSync( target ).isDirectory() ) {
-            targetFile = path.join( target, path.basename( source ) );
-        }
-    }
-
-    fs.writeFileSync(targetFile, fs.readFileSync(source));
-}
-
-function copyFolderRecursiveSync( source, target ) {
-    var files = [];
-
-    //check if folder needs to be created or integrated
-    var targetFolder = target
-	if ( !fs.existsSync( targetFolder ) ) {
-        fs.mkdirSync( targetFolder );
-    }
-
-    //copy
-    if ( fs.lstatSync( source ).isDirectory() ) {
-        files = fs.readdirSync( source );
-        files.forEach( function ( file ) {
-            var curSource = path.join( source, file );
-            if ( fs.lstatSync( curSource ).isDirectory() ) {
-                copyFolderRecursiveSync( curSource, targetFolder );
-            } else {
-                copyFileSync( curSource, targetFolder );
-            }
-        } );
-    }
-}
-
+ 
 
 var executeWorkFlow = function(wf, opts, donefn) {
-	wf = clone(wf);
+	wf = util.clone(wf);
 	if(typeof opts == 'undefined') var opts = {};
 	
 	var openFileWritesHandler = {};
@@ -254,13 +108,13 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 	}
 	var replaceVars = function(c) {
-		if(isOnlyOneVariable(c)) {
-			var varName = getStringBetween(c, '##','##')
+		if(util.isOnlyOneVariable(c)) {
+			var varName = util.getStringBetween(c, '##','##')
 			c = vars[varName]
 		}
 		else {
 			for(var k in vars) {
-				c = replaceAll(c, '##' + k + '##', vars[k]);
+				c = util.replaceAll(c, '##' + k + '##', vars[k]);
 			}
 		}
 		return c;
@@ -336,8 +190,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			}
 			process.nextTick(checkNext);
 		}
-		else if(step.type == 'replaceAll') {
-			vars[step.var] = replaceAll(step.source, step.from, step.to);
+		else if(step.type == 'util.replaceAll') {
+			vars[step.var] = util.replaceAll(step.source, step.from, step.to);
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'if') {
@@ -425,7 +279,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 		else if(step.type == 'copyFolder') {
 			if(fs.existsSync(step.source)) {
-				copyFolderRecursiveSync(step.source, step.target);
+				util.copyFolderRecursiveSync(step.source, step.target);
 				process.nextTick(checkNext);
 			}
 			else {
@@ -437,7 +291,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'deleteFolder') {
-			deleteFolderRecursive(step.folder);
+			util.deleteFolderRecursive(step.folder);
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'deleteFile') {
@@ -509,7 +363,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 						ws.getCell(cell).value = value;
 					}
 					var checkExcelNext = function() {
-						if((val = fetchValue(ws, 'A' + row)) != null) {
+						if((val = util.fetchValue(ws, 'A' + row)) != null) {
 							var inputstep = step;
 							inputstep.row = row;
 							executeWorkFlow(config.workFlows[step.wf], {inputVars:inputstep,outputVars:step.outputVars,ws:ws,row:row,updateCellValue:updateCellValue}, function(outputOpts) {
@@ -540,7 +394,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 		else if (step.type == 'wsread') {
 			if(typeof opts.ws != 'undefined') {
-				var val = fetchValue(opts.ws, step.col + opts.row);
+				var val = util.fetchValue(opts.ws, step.col + opts.row);
 				vars[step.var] = val;
 			}
 			process.nextTick(checkNext);
