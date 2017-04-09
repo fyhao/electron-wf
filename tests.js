@@ -9,7 +9,9 @@ var sql = require('mssql');
 var xml2js = require('xml2js')
 var config = null;
 var excelFile = null;
-
+global.ProjRequire = function(module) {
+	return require(__dirname + '/' + module);
+}
  
 var initTestDataPrep = function(cfg, donefn) {
 	var excelFile = cfg.testDataExcelFile;
@@ -103,7 +105,10 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	ctx.openFileWritesHandler = {};
 	ctx.excelHandler = {};
 	ctx.vars = {};
-	
+	ctx.mainWin = mainWin;
+	ctx.executeWorkFlow = executeWorkFlow;
+	ctx.config = config;
+	ctx.opts = opts;
 	
 	if(typeof opts.inputVars != 'undefined') {
 		for(var i in opts.inputVars) {
@@ -165,101 +170,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		var step = wf.steps[curStep];
 		step = replaceVarsStep(step);
 		// execute step
-		if(step.type == 'log') {
-			console.log(step.log);
-			mainWin.webContents.send('wfevt', {action:'log',item:{log:step.log}});
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'exec') {
-			console.log('Exec ' + step.cmd);
-			cp.exec(step.cmd, function(err, stdout, stderr) {
-				console.log('err ' + err);
-				console.log('stdout ' + stdout);
-				console.log('stderr ' + stderr);
-				ctx.vars['execStdout'] = stdout;
-				ctx.vars['execStderr'] = stderr;
-				process.nextTick(checkNext);
-			});
-		}
-		else if(step.type == 'setVar') {
-			ctx.vars[step.name] = step.value;
-			process.nextTick(checkNext);
-		}
-		else if(step.type == "incrementVar") {
-			try {
-				ctx.vars[step.name] = parseInt(ctx.vars[step.name]) + 1;
-			} catch (e) {
-				console.log(e);
-			}
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'util.replaceAll') {
-			ctx.vars[step.var] = util.replaceAll(step.source, step.from, step.to);
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'if') {
-			var val = ctx.vars[step.var];
-			var validated = false;
-			if(step.if == 'contains') {
-				validated = val.indexOf(step.pattern) != -1;
-			}
-			else if(step.if == 'equal') {
-				//console.log('execute if [' + val + '] = [' + step.pattern + ']');
-				validated = val == step.pattern;
-			}
-			else if(step.if == 'eq') {
-				//console.log('execute if [' + val + '] = [' + step.pattern + ']');
-				validated = val == step.pattern;
-			}
-			else if(step.if == 'neq') {
-				//console.log('execute if [' + val + '] = [' + step.pattern + ']');
-				validated = val != step.pattern;
-			}
-			if(validated) {
-				if(step.yes_subflow != null) {
-					var inputVars = step;
-					for(var i in ctx.vars) {
-						inputVars[i] = ctx.vars[i];
-					}
-					inputVars['inputall'] = true;
-					inputVars['outputall'] = true;
-					executeWorkFlow(config.workFlows[step.yes_subflow], {inputVars:inputVars,outputVars:step.yes_outputVars}, function(outputOpts) {
-						if(outputOpts.outputVars) {
-							for(var i in outputOpts.outputVars) {
-								ctx.vars[i] = outputOpts.outputVars[i];
-							}
-						}
-						process.nextTick(checkNext);
-					});
-				}
-				else {
-					process.nextTick(checkNext);
-				}
-			}
-			else {
-				if(step.no_subflow != null) {
-					var inputVars = step;
-					for(var i in ctx.vars) {
-						inputVars[i] = ctx.vars[i];
-					}
-					inputVars['inputall'] = true;
-					inputVars['outputall'] = true;
-					executeWorkFlow(config.workFlows[step.no_subflow], {inputVars:inputVars,outputVars:step.no_outputVars}, function(outputOpts) {
-						if(outputOpts.outputVars) {
-							for(var i in outputOpts.outputVars) {
-								ctx.vars[i] = outputOpts.outputVars[i];
-							}
-						}
-						process.nextTick(checkNext);
-					});
-				}
-				else {
-					process.nextTick(checkNext);
-				}
-			}
-		}
-		else if(step.type == 'testDataPrep') {
-			initTestDataPrep(config.testDataPrep[step.name], checkNext);
+		if(step.type == 'testDataPrep') {
+			initTestDataPrep(ctx.testDataPrep[step.name], checkNext);
 		}
 		else if(step.type == 'subflow') {
 			executeWorkFlow(config.workFlows[step.name], {inputVars:step.inputVars,outputVars:step.outputVars}, function(outputOpts) {
@@ -271,207 +183,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 				process.nextTick(checkNext);
 			});
 		}
-		else if(step.type == 'copyFile') {
-			if(fs.existsSync(step.source)) {
-				var stream = fs.createReadStream(step.source).pipe(fs.createWriteStream(step.target));
-				stream.on('finish', function () { process.nextTick(checkNext); });
-			}
-			else {
-				process.nextTick(checkNext);
-			}
-		}
-		else if(step.type == 'copyFolder') {
-			if(fs.existsSync(step.source)) {
-				util.copyFolderRecursiveSync(step.source, step.target);
-				process.nextTick(checkNext);
-			}
-			else {
-				process.nextTick(checkNext);
-			}
-		}
-		else if(step.type == 'createFolder') {
-			fs.mkdirSync(step.folder);
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'deleteFolder') {
-			util.deleteFolderRecursive(step.folder);
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'deleteFile') {
-			if(fs.existsSync(step.file))
-			fs.unlinkSync(step.file);
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'openFileRead') {
-			ctx.vars[step.var] = fs.readFileSync(step.file);
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'openFileWrite') {
-			ctx.openFileWritesHandler[step.name] = '';
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'appendFileWrite') {
-			ctx.openFileWritesHandler[step.name] += step.content;
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'printlnFileWrite') {
-			ctx.openFileWritesHandler[step.name] += step.content + "\r\n";
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'closeFileWrite') {
-			if(step.append) {
-				fs.appendFileSync(step.file, ctx.openFileWritesHandler[step.name].toString());
-			}
-			else {
-				fs.writeFileSync(step.file, ctx.openFileWritesHandler[step.name].toString());
-			}
-			ctx.openFileWritesHandler[step.name] = '';
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'openExcel') {
-			var workbook = new Excel.Workbook();
-			workbook.xlsx.readFile(step.file)
-				.then(function() {
-					ctx.excelHandler[step.name] = workbook;
-					process.nextTick(checkNext);
-				});
-		}
-		else if(step.type == 'readExcelCell') {
-			var wb = ctx.excelHandler[step.name];
-			var ws = wb.getWorksheet(step.sheet);
-			ctx.vars[step.var] = ws.getCell(step.cell).value;
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'writeExcelCell') {
-			var wb = ctx.excelHandler[step.name];
-			var ws = wb.getWorksheet(step.sheet);
-			ws.getCell(step.cell).value = step.value;
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'saveExcel') {
-			var wb = ctx.excelHandler[step.name];
-			wb.xlsx.writeFile(step.file)
-			.then(function() {
-				process.nextTick(checkNext);
-			});
-		}
-		else if(step.type == 'runExcelCase') {
-			var workbook = new Excel.Workbook();
-			workbook.xlsx.readFile(step.file)
-				.then(function() {
-					var ws = workbook.getWorksheet(step.sheet);
-					var row = step.startRow;
-					var val = null;
-					var updateCellValue = function(cell, value) {
-						ws.getCell(cell).value = value;
-					}
-					var checkExcelNext = function() {
-						if((val = util.fetchValue(ws, 'A' + row)) != null) {
-							var inputstep = step;
-							inputstep.row = row;
-							executeWorkFlow(config.workFlows[step.wf], {inputVars:inputstep,outputVars:step.outputVars,ws:ws,row:row,updateCellValue:updateCellValue}, function(outputOpts) {
-								if(outputOpts.outputVars) {
-									for(var i in outputOpts.outputVars) {
-										vars[i] = outputOpts.outputVars[i];
-									}
-								}
-								row++;
-								process.nextTick(checkExcelNext);
-							});
-						}
-						else {
-							// done
-							if(typeof step.savefile != 'undefined') {
-								workbook.xlsx.writeFile(step.savefile)
-								.then(function() {
-									process.nextTick(checkNext);
-								});
-							}
-							else {
-								process.nextTick(checkNext);
-							}
-						}
-					}
-					process.nextTick(checkExcelNext);
-				});
-		}
-		else if (step.type == 'wsread') {
-			if(typeof opts.ws != 'undefined') {
-				var val = util.fetchValue(opts.ws, step.col + opts.row);
-				ctx.vars[step.var] = val;
-			}
-			process.nextTick(checkNext);
-		}
-		else if (step.type == 'wsupdate') {
-			if(typeof opts.ws != 'undefined') {
-				var toUpdate = true;
-				if(typeof step.if != 'undefined') {
-					var val = vars[step.ifvar];
-					var validated = false;
-					if(step.if == 'contains') {
-						validated = val.indexOf(step.pattern) != -1;
-					}
-					else if(step.if == 'equal') {
-						validated = val == step.pattern;
-					}
-					else if(step.if == 'eq') {
-						validated = val == step.pattern;
-					}
-					else if(step.if == 'neq') {
-						validated = val != step.pattern;
-					}
-					toUpdate = validated;
-				}
-				if(toUpdate) {
-					opts.updateCellValue(step.col + opts.row, step.value);
-				}
-			}
-			process.nextTick(checkNext);
-		}
-		else if(step.type == 'sql') {
-			var connection1 = new sql.Connection(config.db[step.ds], function(err) {
-				if(err) {
-					console.log('Error');
-					console.log(err);
-					process.nextTick(checkNext)
-					return
-				}
-				var request = new sql.Request(connection1);
-				request.query(step.sql, function(err, recordset) {
-					if(err) {
-						console.dir(err);
-						return;
-					}
-					//console.log(recordset);
-					//console.log(step.recordsets);
-					if(step.recordsets && step.recordsets.length) {
-						recordset.forEach(function(i) {
-							step.recordsets.forEach(function(j) {
-								if(typeof i[j] != 'undefined') {
-									ctx.vars[j] = i[j];
-								}
-							});
-						});
-					}
-					process.nextTick(checkNext);
-				});			
-			});
-		}
-		else if(step.type == 'xml') {
-			var parser = new xml2js.Parser();
-			fs.readFile(step.file, function(err, data) {
-				parser.parseString(data, function(err1, result) {
-					ctx.vars[step.var] = result;
-					console.log(result);
-					process.nextTick(checkNext);
-				});
-			});
-		}
-		else if(step.type == 'evaljs') {
-			var val = eval('vars = ' + JSON.stringify(ctx.vars) + '; ' + step.code);
-			ctx.vars[step.var] = val;
-			process.nextTick(checkNext);
-		}
+		
+		
 		else {
 			// search available work flow
 			if(typeof config.workFlows[step.type] != 'undefined') {
@@ -492,7 +205,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			}
 			else {
 				// TODO TEMP
-				stepModule.processStep({}, step, checkNext);
+				stepModule.processStep(ctx, step, checkNext);
 			}
 		}
 	} // end next

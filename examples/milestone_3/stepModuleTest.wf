@@ -26,6 +26,10 @@ module.exports = {
 				{type:'SubAllTest',input:'some input',inputall:true,outputall:true},
 				{type:'setVarTest',name:'a',value:3},
 				{type:'log', log:'setVar will see [3] -> [##a##]'},
+				{type:'replaceAll',var:'toReplace',source:'test1234', from:'test',to:'EEE'},
+				{type:'log',log:'test replaceAll test1234 to EEE1234 [##toReplace##]'},
+				{type:'if',var:'toReplace',if:'contains',pattern:'EEE',yes_subflow:'YesFlow',no_subflow:'NoFlow'},
+				{type:'if',var:'toReplace',if:'contains',pattern:'DDD',yes_subflow:'YesFlow',no_subflow:'NoFlow'},
 			]
 		}
 		,
@@ -39,5 +43,16 @@ module.exports = {
 				{type:'log',log:'SubAll input ##input## a ##a##'}
 			]
 		}
+		,
+		YesFlow : {
+			steps : [
+				{type:'log',log:'Yes Flow'}
+			]
+		},
+		NoFlow : {
+			steps : [
+				{type:'log',log:'No Flow'}
+			]
+		},
 	}
 }

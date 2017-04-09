@@ -19,7 +19,10 @@ module.exports = {
 				{type:'setVar',name:'target',value:'b'},
 				{type:'log',log:'To copy folder from ##source## to ##target##'},
 				{type:'deleteFolder',folder:'##target##'},
-				{type:'copyFolder', source:'##source##',target:'##target##'}
+				{type:'copyFolder', source:'##source##',target:'##target##'},
+				{type:'deleteFolder',folder:'c'},
+				{type:'createFolder',folder:'c'},
+				{type:'deleteFile',file:'c.txt'},
 			]
 		}
 	}
