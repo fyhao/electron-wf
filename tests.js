@@ -98,23 +98,26 @@ var initTestDataPrep = function(cfg, donefn) {
 var executeWorkFlow = function(wf, opts, donefn) {
 	wf = util.clone(wf);
 	if(typeof opts == 'undefined') var opts = {};
+	var ctx = {};
 	
-	var openFileWritesHandler = {};
-	var excelHandler = {};
-	var vars = {};
+	ctx.openFileWritesHandler = {};
+	ctx.excelHandler = {};
+	ctx.vars = {};
+	
+	
 	if(typeof opts.inputVars != 'undefined') {
 		for(var i in opts.inputVars) {
-			vars[i] = opts.inputVars[i];
+			ctx.vars[i] = opts.inputVars[i];
 		}
 	}
 	var replaceVars = function(c) {
 		if(util.isOnlyOneVariable(c)) {
 			var varName = util.getStringBetween(c, '##','##')
-			c = vars[varName]
+			c = ctx.vars[varName]
 		}
 		else {
-			for(var k in vars) {
-				c = util.replaceAll(c, '##' + k + '##', vars[k]);
+			for(var k in ctx.vars) {
+				c = util.replaceAll(c, '##' + k + '##', ctx.vars[k]);
 			}
 		}
 		return c;
@@ -141,21 +144,21 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			var outputVars = {};
 			if(typeof opts.outputVars != 'undefined') {
 				opts.outputVars.forEach(function(i) {
-					outputVars[i] = vars[i];
+					outputVars[i] = ctx.vars[i];
 				});
 			}
 			if(typeof opts.inputVars != 'undefined' && typeof opts.inputVars.outputall != 'undefined' &&  opts.inputVars.outputall) {
-				for(var i in vars) {
-					outputVars[i] = vars[i];
+				for(var i in ctx.vars) {
+					outputVars[i] = ctx.vars[i];
 				}
 			}
 			if(donefn)process.nextTick(function() {
 				donefn({outputVars:outputVars});
 			});
 			// garbage collection
-			openFileWritesHandler = {};
-			excelHandler = {};
-			vars = {};
+			ctx.openFileWritesHandler = {};
+			ctx.excelHandler = {};
+			ctx.vars = {};
 		}
 	}
 	var next = function() {
@@ -173,29 +176,29 @@ var executeWorkFlow = function(wf, opts, donefn) {
 				console.log('err ' + err);
 				console.log('stdout ' + stdout);
 				console.log('stderr ' + stderr);
-				vars['execStdout'] = stdout;
-				vars['execStderr'] = stderr;
+				ctx.vars['execStdout'] = stdout;
+				ctx.vars['execStderr'] = stderr;
 				process.nextTick(checkNext);
 			});
 		}
 		else if(step.type == 'setVar') {
-			vars[step.name] = step.value;
+			ctx.vars[step.name] = step.value;
 			process.nextTick(checkNext);
 		}
 		else if(step.type == "incrementVar") {
 			try {
-				vars[step.name] = parseInt(vars[step.name]) + 1;
+				ctx.vars[step.name] = parseInt(ctx.vars[step.name]) + 1;
 			} catch (e) {
 				console.log(e);
 			}
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'util.replaceAll') {
-			vars[step.var] = util.replaceAll(step.source, step.from, step.to);
+			ctx.vars[step.var] = util.replaceAll(step.source, step.from, step.to);
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'if') {
-			var val = vars[step.var];
+			var val = ctx.vars[step.var];
 			var validated = false;
 			if(step.if == 'contains') {
 				validated = val.indexOf(step.pattern) != -1;
@@ -215,15 +218,15 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			if(validated) {
 				if(step.yes_subflow != null) {
 					var inputVars = step;
-					for(var i in vars) {
-						inputVars[i] = vars[i];
+					for(var i in ctx.vars) {
+						inputVars[i] = ctx.vars[i];
 					}
 					inputVars['inputall'] = true;
 					inputVars['outputall'] = true;
 					executeWorkFlow(config.workFlows[step.yes_subflow], {inputVars:inputVars,outputVars:step.yes_outputVars}, function(outputOpts) {
 						if(outputOpts.outputVars) {
 							for(var i in outputOpts.outputVars) {
-								vars[i] = outputOpts.outputVars[i];
+								ctx.vars[i] = outputOpts.outputVars[i];
 							}
 						}
 						process.nextTick(checkNext);
@@ -236,15 +239,15 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			else {
 				if(step.no_subflow != null) {
 					var inputVars = step;
-					for(var i in vars) {
-						inputVars[i] = vars[i];
+					for(var i in ctx.vars) {
+						inputVars[i] = ctx.vars[i];
 					}
 					inputVars['inputall'] = true;
 					inputVars['outputall'] = true;
 					executeWorkFlow(config.workFlows[step.no_subflow], {inputVars:inputVars,outputVars:step.no_outputVars}, function(outputOpts) {
 						if(outputOpts.outputVars) {
 							for(var i in outputOpts.outputVars) {
-								vars[i] = outputOpts.outputVars[i];
+								ctx.vars[i] = outputOpts.outputVars[i];
 							}
 						}
 						process.nextTick(checkNext);
@@ -262,7 +265,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			executeWorkFlow(config.workFlows[step.name], {inputVars:step.inputVars,outputVars:step.outputVars}, function(outputOpts) {
 				if(outputOpts.outputVars) {
 					for(var i in outputOpts.outputVars) {
-						vars[i] = outputOpts.outputVars[i];
+						ctx.vars[i] = outputOpts.outputVars[i];
 					}
 				}
 				process.nextTick(checkNext);
@@ -300,53 +303,53 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'openFileRead') {
-			vars[step.var] = fs.readFileSync(step.file);
+			ctx.vars[step.var] = fs.readFileSync(step.file);
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'openFileWrite') {
-			openFileWritesHandler[step.name] = '';
+			ctx.openFileWritesHandler[step.name] = '';
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'appendFileWrite') {
-			openFileWritesHandler[step.name] += step.content;
+			ctx.openFileWritesHandler[step.name] += step.content;
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'printlnFileWrite') {
-			openFileWritesHandler[step.name] += step.content + "\r\n";
+			ctx.openFileWritesHandler[step.name] += step.content + "\r\n";
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'closeFileWrite') {
 			if(step.append) {
-				fs.appendFileSync(step.file, openFileWritesHandler[step.name].toString());
+				fs.appendFileSync(step.file, ctx.openFileWritesHandler[step.name].toString());
 			}
 			else {
-				fs.writeFileSync(step.file, openFileWritesHandler[step.name].toString());
+				fs.writeFileSync(step.file, ctx.openFileWritesHandler[step.name].toString());
 			}
-			openFileWritesHandler[step.name] = '';
+			ctx.openFileWritesHandler[step.name] = '';
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'openExcel') {
 			var workbook = new Excel.Workbook();
 			workbook.xlsx.readFile(step.file)
 				.then(function() {
-					excelHandler[step.name] = workbook;
+					ctx.excelHandler[step.name] = workbook;
 					process.nextTick(checkNext);
 				});
 		}
 		else if(step.type == 'readExcelCell') {
-			var wb = excelHandler[step.name];
+			var wb = ctx.excelHandler[step.name];
 			var ws = wb.getWorksheet(step.sheet);
-			vars[step.var] = ws.getCell(step.cell).value;
+			ctx.vars[step.var] = ws.getCell(step.cell).value;
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'writeExcelCell') {
-			var wb = excelHandler[step.name];
+			var wb = ctx.excelHandler[step.name];
 			var ws = wb.getWorksheet(step.sheet);
 			ws.getCell(step.cell).value = step.value;
 			process.nextTick(checkNext);
 		}
 		else if(step.type == 'saveExcel') {
-			var wb = excelHandler[step.name];
+			var wb = ctx.excelHandler[step.name];
 			wb.xlsx.writeFile(step.file)
 			.then(function() {
 				process.nextTick(checkNext);
@@ -395,7 +398,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		else if (step.type == 'wsread') {
 			if(typeof opts.ws != 'undefined') {
 				var val = util.fetchValue(opts.ws, step.col + opts.row);
-				vars[step.var] = val;
+				ctx.vars[step.var] = val;
 			}
 			process.nextTick(checkNext);
 		}
@@ -445,7 +448,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 						recordset.forEach(function(i) {
 							step.recordsets.forEach(function(j) {
 								if(typeof i[j] != 'undefined') {
-									vars[j] = i[j];
+									ctx.vars[j] = i[j];
 								}
 							});
 						});
@@ -458,15 +461,15 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			var parser = new xml2js.Parser();
 			fs.readFile(step.file, function(err, data) {
 				parser.parseString(data, function(err1, result) {
-					vars[step.var] = result;
+					ctx.vars[step.var] = result;
 					console.log(result);
 					process.nextTick(checkNext);
 				});
 			});
 		}
 		else if(step.type == 'evaljs') {
-			var val = eval('vars = ' + JSON.stringify(vars) + '; ' + step.code);
-			vars[step.var] = val;
+			var val = eval('vars = ' + JSON.stringify(ctx.vars) + '; ' + step.code);
+			ctx.vars[step.var] = val;
 			process.nextTick(checkNext);
 		}
 		else {
@@ -474,14 +477,14 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			if(typeof config.workFlows[step.type] != 'undefined') {
 				var inputVars = step;
 				if(typeof step.inputall != 'undefined' && step.inputall) {
-					for(var i in vars) {
-						inputVars[i] = vars[i];
+					for(var i in ctx.vars) {
+						inputVars[i] = ctx.vars[i];
 					}
 				}
 				executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars}, function(outputOpts) {
 					if(outputOpts.outputVars) {
 						for(var i in outputOpts.outputVars) {
-							vars[i] = outputOpts.outputVars[i];
+							ctx.vars[i] = outputOpts.outputVars[i];
 						}
 					}
 					process.nextTick(checkNext);

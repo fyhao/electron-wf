@@ -90,23 +90,29 @@ var StepProcessor = function(ctx, step, next) {
 			console.log('Error spec function is missing for ' + step.type);
 			process.exit(0);
 		}
+		spec = def.spec();
 		if(typeof def.process == 'undefined') {
 			console.log('Error process function is missing for ' + step.type);
 			process.exit(0);
 		}
 	}
 	var checkSpec = function(step) {
-		return true;
+		// checkRequired Fields
+		spec.fields.forEach(function(field) {
+			if(field.required) {
+				if(typeof step[field.name] == 'undefined') {
+					console.log('Error step did not have required field ' + filed.name);
+					process.exit(0);
+				}
+			}
+		});
 	}
 	this.process = function() {
 		if(def == null) {
 			process.nextTick(next);
 			return; // if def not found, silent exit
 		}
-		if(!checkSpec(step)) {
-			console.log('Error on checking spec on step');
-			return;
-		}
+		checkSpec(step);
 		def.process(ctx, step, next);
 	}
 	init();
