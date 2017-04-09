@@ -183,8 +183,6 @@ var executeWorkFlow = function(wf, opts, donefn) {
 				process.nextTick(checkNext);
 			});
 		}
-		
-		
 		else {
 			// search available work flow
 			if(typeof config.workFlows[step.type] != 'undefined') {
@@ -204,7 +202,6 @@ var executeWorkFlow = function(wf, opts, donefn) {
 				});
 			}
 			else {
-				// TODO TEMP
 				stepModule.processStep(ctx, step, checkNext);
 			}
 		}
