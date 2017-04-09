@@ -1,0 +1,75 @@
+
+var workFlows = {
+	Plugin_test : require(__dirname + '\\config_plugin.wf'),
+	PerformWork : {
+		showInMenu:true,
+		steps : [
+			{type:'log',log:'Performing work ' + __dirname},
+			{type:'setVar',name:'someGlobal',value:'test'},
+			{type:'log',log:'the some global value ##someGlobal##'},
+			{type:'PerformWorkSub',inputall:true,outputall:true},
+			{type:'log',log:'check innertest ##someGlobal##'}
+		]
+	},
+	PerformWorkSub : {
+		showInMenu:true,
+		steps : [
+			{type:'log',log:'Performing work sub ##someGlobal##'},
+			{type:'setVar',name:'someGlobal',value:'innertest'},
+		]
+	},
+	PerformArrayTest : {
+		showInMenu:true,
+		steps : [
+			{type:'log',log:'Performing array test'},
+			{type:'setVar',name:'someArray',value:[1,2,3,4]},
+			{type:'log',log:'array ##someArray##'},
+			{type:'PerformArrayTestSub',inputall:true,outputall:true},
+			{type:'evaljs',var:'len',code:"vars['someArray'].length"},
+			{type:'log',log:'The length is ##len##'},
+			{type:'CopyFiles',files:'##someArray##'},
+			{type:'CopyFiles',files:'##someArray## TEST'},
+		]
+	},
+	PerformArrayTestSub : {
+		steps : [
+			{type:'log',log:'array sub ##someArray##'},
+			{type:'evaljs',var:'res',code:"vars['someArray'].push('5')"},
+		]
+	},
+	CopyFiles : {
+		steps : [
+			{type:'log',log:'to copy files ##files##'},
+			{type:'evaljs',var:'len',code:"vars['files'].length"},
+			{type:'log',log:'The length is ##len##'},
+		]
+	}
+}
+var loadPlugin = function(filepath) {
+	delete require.cache[require.resolve(filepath)];
+	var subflows = require(filepath);
+	for(var i in subflows) {
+		workFlows[i] = subflows[i];
+	}
+}
+loadPlugin(__dirname + '\\plugin_test.wf');
+	
+	
+module.exports = {
+	
+	"db" : {
+		"cbpdb" : {
+			user:'test',
+			password:'test',
+			server : 'localhost\\sqlserver2012',
+			database : 'cbp'
+		}
+	}
+	
+	,
+	workFlows : workFlows
+	,
+	plugins : [
+		__dirname + '\\plugin_test.wf'
+	]
+}
