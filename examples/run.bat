@@ -1,1 +1,0 @@
-"D:\Projects\WF\WF.exe" "D:\temp\workflow_test\config.properties"
