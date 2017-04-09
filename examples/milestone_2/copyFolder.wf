@@ -1,0 +1,26 @@
+
+module.exports = {
+	
+	"db" : {
+		"testdb" : {
+			user:'test',
+			password:'test',
+			server : 'localhost\\sqlserver2012',
+			database : 'cbp'
+		}
+	}
+	
+	,
+	workFlows : {
+		PerformWork : {
+			showInMenu:true,
+			steps : [
+				{type:'setVar',name:'source',value:__dirname + '\\a'},
+				{type:'setVar',name:'target',value:'b'},
+				{type:'log',log:'To copy folder from ##source## to ##target##'},
+				{type:'deleteFolder',folder:'##target##'},
+				{type:'copyFolder', source:'##source##',target:'##target##'}
+			]
+		}
+	}
+}

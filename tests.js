@@ -1,6 +1,7 @@
 const {app, BrowserWindow, Menu, dialog} = require('electron')
 
 var fs = require('fs');
+var path = require('path');
 var cp = require('child_process');
 var Excel = require('exceljs');
 var sql = require('mssql');
@@ -201,6 +202,45 @@ function clone(item) {
 
     return result;
 }
+
+function copyFileSync( source, target ) {
+
+    var targetFile = target;
+
+    //if target is a directory a new file with the same name will be created
+    if ( fs.existsSync( target ) ) {
+        if ( fs.lstatSync( target ).isDirectory() ) {
+            targetFile = path.join( target, path.basename( source ) );
+        }
+    }
+
+    fs.writeFileSync(targetFile, fs.readFileSync(source));
+}
+
+function copyFolderRecursiveSync( source, target ) {
+    var files = [];
+
+    //check if folder needs to be created or integrated
+    var targetFolder = target
+	if ( !fs.existsSync( targetFolder ) ) {
+        fs.mkdirSync( targetFolder );
+    }
+
+    //copy
+    if ( fs.lstatSync( source ).isDirectory() ) {
+        files = fs.readdirSync( source );
+        files.forEach( function ( file ) {
+            var curSource = path.join( source, file );
+            if ( fs.lstatSync( curSource ).isDirectory() ) {
+                copyFolderRecursiveSync( curSource, targetFolder );
+            } else {
+                copyFileSync( curSource, targetFolder );
+            }
+        } );
+    }
+}
+
+
 var executeWorkFlow = function(wf, opts, donefn) {
 	wf = clone(wf);
 	if(typeof opts == 'undefined') var opts = {};
@@ -378,6 +418,15 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			if(fs.existsSync(step.source)) {
 				var stream = fs.createReadStream(step.source).pipe(fs.createWriteStream(step.target));
 				stream.on('finish', function () { process.nextTick(checkNext); });
+			}
+			else {
+				process.nextTick(checkNext);
+			}
+		}
+		else if(step.type == 'copyFolder') {
+			if(fs.existsSync(step.source)) {
+				copyFolderRecursiveSync(step.source, step.target);
+				process.nextTick(checkNext);
 			}
 			else {
 				process.nextTick(checkNext);
