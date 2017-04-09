@@ -2,7 +2,7 @@
 module.exports = {
 	
 	"db" : {
-		"testdb" : {
+		"testdb1" : {
 			user:'test',
 			password:'test',
 			server : 'localhost\\sqlserver2012',
@@ -12,16 +12,16 @@ module.exports = {
 	
 	,
 	workFlows : {
-		PerformWork : {
+		PluginWork : {
 			showInMenu:true,
 			steps : [
-				{type:'log',log:'PerformWork init'},
-				{type:'PluginWork'}
+				{type:'log',log:'PluginWork init'},
+				{type:'PluginWork2'}
 			]
 		}
 	}
 	,
 	plugins : [
-		__dirname + '\\milestone_1_plugin.wf'
+		__dirname + '\\milestone_1_plugin_2.wf'
 	]
 }

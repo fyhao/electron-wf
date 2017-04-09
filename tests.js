@@ -593,7 +593,42 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	process.nextTick(next);
 }
 
-
+var loadPlugins = function(config) {
+	if(typeof config.plugins != 'undefined' && config.plugins.length) {
+		config.plugins.forEach(function(filepath) {
+			delete require.cache[require.resolve(filepath)];
+			var cfg = require(filepath);
+			// load cfg.plugins
+			if(typeof cfg.plugins != 'undefined' && cfg.plugins.length) {
+				loadPlugins(cfg);
+			}
+			// load cfg.db
+			if(typeof cfg.db != 'undefined') {
+				for(var key in cfg.db) {
+					if(config.db.hasOwnProperty(key)) {
+						dialog.showMessageBox({message:'There is duplicate db key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit', buttons:['OK']});
+						process.exit(0);
+						return;
+					}
+					// append db object into parent config
+					config.db[key] = cfg.db[key];
+				}
+			}
+			// load cfg.workFlows
+			if(typeof cfg.workFlows != 'undefined') {
+				for(var key in cfg.workFlows) {
+					if(config.workFlows.hasOwnProperty(key)) {
+						dialog.showMessageBox({message:'There is duplicate workFlows key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit', buttons:['OK']});
+						process.exit(0);
+						return;
+					}
+					// append workFlows object into parent config
+					config.workFlows[key] = cfg.workFlows[key];
+				}
+			}
+		});
+	}
+}
 
 module.exports.reloadConfig = function() {
 	loadConfig(lastConfigFile);
@@ -607,6 +642,8 @@ module.exports.loadConfig = function loadConfig(configFile) {
 	lastConfigFile = configFile;
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
+	// load plugins
+	loadPlugins(config);
 	excelFile = config.testDataExcelFile;
 	var testDataPrepMenus = [];
 	for(var i in config.testDataPrep) {
