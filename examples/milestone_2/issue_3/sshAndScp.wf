@@ -1,0 +1,18 @@
+
+module.exports = {
+	
+	"db" : {
+		
+	}
+	
+	,
+	workFlows : {
+		TestSSHAndSCP : {
+			showInMenu:true,
+			steps : [
+				{type:'ssh',host:'dd',user:'dd',pass:'dd',port:22,cmds:['whoami']},
+				{type:'log',log:'done'}
+			]
+		}
+	}
+}
