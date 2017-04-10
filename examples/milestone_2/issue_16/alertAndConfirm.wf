@@ -1,0 +1,21 @@
+
+module.exports = {
+	
+	"db" : {
+		
+	}
+	
+	,
+	workFlows : {
+		TestAlertAndConfirm : {
+			showInMenu:true,
+			steps : [
+				{type:'log',log:'The log before alert'},
+				{type:'alert',message:'Hi'},
+				{type:'log',log:'The log after alert, this should be shown after clicking OK button on alert prompt'},
+				{type:'confirm',message:'what options you chose?', buttons: ['A','B','Cancel'], answer:'theChoseVar',answerIndex:'theChoseVarIndex'},
+				{type:'log',log:'the answer ##theChoseVar## answerIndex ##theChoseVarIndex##'}
+			]
+		}
+	}
+}
