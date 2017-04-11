@@ -166,7 +166,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		step = replaceVarsStep(step);
 		// execute step
 		if(step.type == 'testDataPrep') {
-			initTestDataPrep(ctx.testDataPrep[step.name], checkNext);
+			initTestDataPrep(config.testDataPrep[step.name], checkNext);
 		}
 		else if(step.type == 'subflow') {
 			executeWorkFlow(config.workFlows[step.name], {inputVars:step.inputVars,outputVars:step.outputVars}, function(outputOpts) {
