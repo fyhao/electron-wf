@@ -3,7 +3,11 @@ module.exports = {
 	
 	"db" : {
 		SomeMySQLDB : {
-			
+			user:'root',
+			password:'root',
+			server : 'localhost',
+			database : 'jas606',
+			type : 'mysql',
 		}
 		,
 		SomeMSSQLDB : {
