@@ -1,0 +1,22 @@
+
+module.exports = {
+	
+	"db" : {
+		
+	}
+	
+	,
+	workFlows : {
+		TestSSHAndSCP : {
+			showInMenu:true,
+			steps : [
+				{type:'ssh',host:'dd',user:'dd',pass:'dd',port:22,cmds:['whoami']},
+				{type:'log',log:'done ssh'},
+				{type:'exec',cmd:'echo "test"> test.txt'},
+				{type:'scp',host:'dd',user:'fyhao',pass:'dd',port:22,src:'test.txt',dest:'temp/test.txt',action:'upload'},
+				{type:'scp',host:'dd',user:'fyhao',pass:'dd',port:22,src:'temp/test.txt',dest:'test2.txt',action:'download'},
+				{type:'log',log:'done scp'},
+			]
+		}
+	}
+}
