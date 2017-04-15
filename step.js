@@ -26,7 +26,7 @@ var _bootstrap = function() {
 	scanNodeModules();
 }
 var scanRootLevelFiles = function() {
-	var list = fs.readdirSync(__dirname + "\\" + LIB_STEPS_PATH);
+	var list = fs.readdirSync(__dirname + "/" + LIB_STEPS_PATH);
 	list.forEach(function(filename) {
 		if(filename.lastIndexOf('.js') > -1) {
 			var filepath = './' + LIB_STEPS_PATH + '/' + filename;
@@ -42,7 +42,7 @@ var scanRootLevelFiles = function() {
 	});
 }
 var scanFolders = function() {
-	var list = fs.readdirSync(__dirname + "\\" + LIB_STEPS_PATH);
+	var list = fs.readdirSync(__dirname + "/" + LIB_STEPS_PATH);
 	list.forEach(function(folder) {
 		if(folder.lastIndexOf('.js') == -1) {
 			var filepath = './' + LIB_STEPS_PATH + '/' + folder + '/init.js';
