@@ -1,7 +1,9 @@
 # electron-wf
 
-Badge
+Badges
 ------
+[![Travis CI Build Status](https://travis-ci.org/fyhao/electron-wf.svg?branch=master)](https://travis-ci.org/fyhao/electron-wf)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/c2rpadfexi6pvyd6?svg=true)](https://ci.appveyor.com/project/fyhao/electron-wf)
 [![Coverage Status](https://coveralls.io/repos/github/fyhao/electron-wf/badge.svg?branch=master)](https://coveralls.io/github/fyhao/electron-wf?branch=master)
 
 
