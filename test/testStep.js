@@ -6,8 +6,9 @@ global.ProjRequire = function(module) {
 
 describe('step.js', function() {
   describe('bootstrap', function() {
+	this.timeout(15000);
     it('should run without error', function() {
-      //stepModule.bootstrap();
+      stepModule.bootstrap();
     });
   });
 });
