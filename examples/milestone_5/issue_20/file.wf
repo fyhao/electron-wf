@@ -45,6 +45,8 @@ module.exports = {
 				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
 				{type:'setVar',name:'targetpath',value:__dirname + "/b.txt"},
 				{type:'copyFile',source:'##filepath##',target:'##targetpath##'},
+				{type:'DeleteFile'},
+				{type:'copyFile',source:'##filepath##',target:'##targetpath##'},
 				{type:'log',log:'TestFileCopy done'},
 			]
 		}
