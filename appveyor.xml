@@ -1,17 +1,17 @@
-environment:
-  ELECTRON_RUN_AS_NODE: 1
-
+# Install scripts. (runs after repo cloning)
 install:
-  - ps: Install-Product node 7.4.0 x64
-  - npm install -g npm --silent
+  # Get the latest stable version of Node.js
+  - ps: Install-Product node
+  # install modules
+  - npm install
 
-build_script:
-  - .\scripts\npm.bat install
-  - gulp electron
-  - npm run compile
-
+# Post-install test scripts.
 test_script:
+  # Output useful info for debugging.
   - node --version
   - npm --version
-  - .\scripts\test.bat
-  - .\scripts\test-integration.bat
+  # run tests
+  - npm test
+
+# Don't actually build.
+build: off
