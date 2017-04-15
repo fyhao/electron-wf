@@ -1,0 +1,86 @@
+
+module.exports = {
+	
+	"db" : {
+		
+	}
+	
+	,
+	workFlows : {
+		TestFileWrite : {
+			showInMenu:true,
+			steps : [
+				{type:'InitFile'},
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'openFileWrite',name:'file'},
+				{type:'printlnFileWrite',name:'file',content:'1st line'},
+				{type:'appendFileWrite',name:'file',content:'2nd line'},
+				{type:'appendFileWrite',name:'file',content:'bbb'},
+				{type:'printlnFileWrite',name:'file',content:'ccc'},
+				{type:'closeFileWrite',name:'file',file:'##filepath##'},
+				{type:'log',log:'TestFileWrite done'},
+			]
+		},
+		
+		TestFileAppend : {
+			showInMenu:true,
+			steps : [
+				{type:'InitFile'},
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'openFileWrite',name:'file'},
+				{type:'printlnFileWrite',name:'file',content:'1st line'},
+				{type:'appendFileWrite',name:'file',content:'2nd line'},
+				{type:'appendFileWrite',name:'file',content:'bbb'},
+				{type:'printlnFileWrite',name:'file',content:'ccc'},
+				{type:'closeFileWrite',name:'file',file:'##filepath##',append:true},
+				{type:'log',log:'TestFileAppend done'},
+			]
+		}
+		,
+		
+		TestFileCopy : {
+			showInMenu:true,
+			steps : [
+				{type:'InitFile'},
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'setVar',name:'targetpath',value:__dirname + "/b.txt"},
+				{type:'copyFile',source:'##filepath##',target:'##targetpath##'},
+				{type:'log',log:'TestFileCopy done'},
+			]
+		}
+		,
+		TestFileRead : {
+			showInMenu:true,
+			steps : [
+				{type:'InitFile'},
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'openFileRead',var:'con',file:'##filepath##'},
+				{type:'log',log:'content: ##con##'},
+				{type:'log',log:'TestFileRead done'},
+			]
+		}
+		,
+		InitFile : {
+			showInMenu:true,
+			steps : [
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'deleteFile',file:'##filepath##'},
+				{type:'openFileWrite',name:'file'},
+				{type:'printlnFileWrite',name:'file',content:'init'},
+				{type:'closeFileWrite',name:'file',file:'##filepath##'},
+				{type:'log',log:'InitFile done'},
+			]
+		}
+		,
+		DeleteFile : {
+			showInMenu:true,
+			steps : [
+				{type:'setVar',name:'filepath',value:__dirname + "/a.txt"},
+				{type:'deleteFile',file:'##filepath##'},
+				{type:'setVar',name:'filepath',value:__dirname + "/b.txt"},
+				{type:'deleteFile',file:'##filepath##'},
+				{type:'log',log:'DeleteFile done'},
+			]
+		}
+	}
+}

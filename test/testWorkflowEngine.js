@@ -55,4 +55,63 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('file.wf', function() {
+	var path = 'examples/milestone_5/issue_20';
+	var wfFile = '../' + path + '/file.wf';
+	var testFile = path + '/a.txt';
+	it('should able to create and overwrite test file', function(done) {
+		
+		delete require.cache[require.resolve(wfFile)]; // delete require cache
+		config = require(wfFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestFileWrite'], {}, function() {
+			var fs = require('fs');
+			var con = fs.readFileSync(testFile).toString();
+			assert.equal('1st line\r\n2nd linebbbccc\r\n', con);
+			done();
+		});
+    });
+	it('should able to create and append test file', function(done) {
+		
+		delete require.cache[require.resolve(wfFile)]; // delete require cache
+		config = require(wfFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestFileAppend'], {}, function() {
+			var fs = require('fs');
+			var con = fs.readFileSync(testFile).toString();
+			assert.equal('init\r\n1st line\r\n2nd linebbbccc\r\n', con);
+			done();
+		});
+    });
+	it('should able to read file', function(done) {
+		
+		delete require.cache[require.resolve(wfFile)]; // delete require cache
+		config = require(wfFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestFileRead'], {}, function() {
+			done();
+		});
+    });
+	it('should able to copy file', function(done) {
+		
+		delete require.cache[require.resolve(wfFile)]; // delete require cache
+		config = require(wfFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestFileCopy'], {}, function() {
+			done();
+		});
+    });
+	it('should able to delete file', function(done) {
+		
+		delete require.cache[require.resolve(wfFile)]; // delete require cache
+		config = require(wfFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['DeleteFile'], {}, function() {
+			var fs = require('fs');
+			assert.equal(true, !fs.existsSync(testFile));
+			done();
+		});
+    });
+  });
 });
