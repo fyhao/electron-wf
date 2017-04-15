@@ -1,13 +1,17 @@
 environment:
-  nodejs_version: "6"
+  ELECTRON_RUN_AS_NODE: 1
 
 install:
-- ps: Install-Product node $env:nodejs_version
-- npm install
+  - ps: Install-Product node 7.4.0 x64
+  - npm install -g npm --silent
+
+build_script:
+  - .\scripts\npm.bat install
+  - gulp electron
+  - npm run compile
 
 test_script:
-- node --version
-- npm --version
-- npm test
-
-build: off
+  - node --version
+  - npm --version
+  - .\scripts\test.bat
+  - .\scripts\test-integration.bat
