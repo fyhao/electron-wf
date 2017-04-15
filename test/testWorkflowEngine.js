@@ -42,4 +42,17 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('wait.wf', function() {
+	it('should able to wait', function(done) {
+		var configFile = '../examples/milestone_2/issue_15/wait.wf';
+		delete require.cache[require.resolve(configFile)]; // delete require cache
+		config = require(configFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestWait'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });

@@ -10,7 +10,7 @@ module.exports = {
 		TestWait : {
 			showInMenu:true,
 			steps : [
-				{type:'setVar',name:'secToWait',value:3},
+				{type:'setVar',name:'secToWait',value:0.1},
 				{type:'evaljs',var:'timeToWait',code:"vars['secToWait'] * 1000"},
 				{type:'log',log:'Going to wait ##secToWait## seconds before we continue'},
 				{type:'wait',time:'##timeToWait##'},
