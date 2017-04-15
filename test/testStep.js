@@ -8,6 +8,7 @@ describe('step.js', function() {
   describe('bootstrap', function() {
     it('should run without error', function() {
       stepModule.bootstrap();
+	  done();
     });
   });
 });
