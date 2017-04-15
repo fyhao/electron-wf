@@ -15,13 +15,14 @@ module.exports = {
 		PerformWork : {
 			showInMenu:true,
 			steps : [
-				{type:'setVar',name:'source',value:__dirname + '\\a'},
-				{type:'setVar',name:'target',value:'b'},
+				{type:'setVar',name:'source',value:__dirname + '/a'},
+				{type:'setVar',name:'target',value:__dirname + '/b'},
 				{type:'log',log:'To copy folder from ##source## to ##target##'},
 				{type:'deleteFolder',folder:'##target##'},
 				{type:'copyFolder', source:'##source##',target:'##target##'},
 				{type:'deleteFolder',folder:'c'},
 				{type:'createFolder',folder:'c'},
+				{type:'deleteFolder',folder:'c'},
 				{type:'deleteFile',file:'c.txt'},
 			]
 		}
