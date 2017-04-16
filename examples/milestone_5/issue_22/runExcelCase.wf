@@ -31,6 +31,7 @@ module.exports = {
 				{type:'if',if:'equal',var:'type',pattern:'ifTest',yes_subflow:'handleIf'},
 				{type:'if',if:'equal',var:'type',pattern:'incrementTest',yes_subflow:'handleIncrement'},
 				{type:'if',if:'equal',var:'type',pattern:'httpbin',yes_subflow:'handleHttpbin'},
+				{type:'if',if:'equal',var:'type',pattern:'ssh',yes_subflow:'handleSsh'},
 				
 				{type:'evaljs',var:'result',code:'vars["expected"] == vars["actual"] ? "passed" : "failed"'},
 				{type:'log',log:'##name##: expected ##expected## actual ##actual## result ##result##'},
@@ -86,6 +87,13 @@ module.exports = {
 				{type:'closeFileWrite',name:'file',file:'##filepath##'},
 				{type:'xml',file:'##filepath##',var:'xmlObj'},
 				{type:'evaljs',var:'actual',code:'JSON.stringify(vars["xmlObj"]).indexOf("Sample Slide Show") > -1 ? "yes": "no"'},
+			]
+		}
+		,
+		handleSsh : {
+			steps : [
+				{type:'ssh',host:'tty.sdf.org',user:'fyhao1',pass:'UkpcLrkR0B1QZg',cmds:['echo "test"'],exitWhenMatchedStdout:'continue'},
+				{type:'setVar',name:'actual',value:'yes'},
 			]
 		}
 	}
