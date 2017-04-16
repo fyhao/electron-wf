@@ -12,7 +12,7 @@ module.exports = {
 			steps : [
 				{type:'setVar',name:'targetDir',value:__dirname + "/target"},
 				{type:'deleteFolder',folder:'##targetDir##'},
-				{type:'exec',cmd:'mkdir "##targetDir##'},
+				{type:'exec',cmd:'mkdir "##targetDir##"'},
 				{type:'log',log:'TestExec done'},
 			]
 		}
