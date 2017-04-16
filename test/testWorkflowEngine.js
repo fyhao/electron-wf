@@ -128,5 +128,19 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
-  
+  describe('exec.wf', function() {
+	it('should able to execute command prompt', function(done) {
+		var configFile = '../examples/milestone_5/issue_23/exec.wf';
+		var testDir = 'examples/milestone_5/issue_23/target';
+		delete require.cache[require.resolve(configFile)]; // delete require cache
+		config = require(configFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestExec'], {}, function() {
+			console.log('done');
+			var fs = require('fs');
+			assert.equal(true, fs.existsSync(testDir));
+			done();
+		});	
+    });
+  });
 });
