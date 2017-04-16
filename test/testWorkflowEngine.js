@@ -114,4 +114,19 @@ describe('workflow_engine.js', function() {
 		});
     });
   });
+  
+  
+  describe('excel.wf', function() {
+	it('should able to open, read, write, save the Excel file', function(done) {
+		var configFile = '../examples/milestone_5/issue_21/excel.wf';
+		delete require.cache[require.resolve(configFile)]; // delete require cache
+		config = require(configFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestExcel'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
+  
 });
