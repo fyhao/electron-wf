@@ -15,6 +15,7 @@ module.exports = {
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',savefile:__dirname + '/result.xlsx'},
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',outputVars:['name']},
 				{type:'log',log:'TestExcelCase done'},
+				{type:'notExist'},
 			]
 		},
 		processRow : {
