@@ -143,4 +143,17 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('runExcelCase.wf', function() {
+	it('should able to run Excel Test Case', function(done) {
+		var configFile = '../examples/milestone_5/issue_22/runExcelCase.wf';
+		delete require.cache[require.resolve(configFile)]; // delete require cache
+		config = require(configFile); // require again
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });
