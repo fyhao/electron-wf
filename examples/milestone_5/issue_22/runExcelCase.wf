@@ -13,7 +13,7 @@ module.exports = {
 				{type:'deleteFile',file:__dirname + '/result.xlsx'},
 				{type:'setVar',name:'filepath',value:__dirname + "/testcase.xlsx"},
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',savefile:__dirname + '/result.xlsx'},
-				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',outputVars:['name']},
+				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRowDummy',outputVars:['name']},
 				{type:'log',log:'TestExcelCase done'},
 				{type:'notExist'},
 			]
@@ -38,6 +38,11 @@ module.exports = {
 				{type:'log',log:'##name##: expected ##expected## actual ##actual## result ##result##'},
 				{type:'wsupdate',col:'E',value:'##result##'},
 				
+			]
+		},
+		processRowDummy : {
+			steps : [
+				{type:'log',log:'Dummy row'},
 			]
 		},
 		handleReplaceAll : {
