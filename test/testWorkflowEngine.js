@@ -156,4 +156,29 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('alert and confirm', function() {
+	it('should able to pass alert and confirm', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					
+					steps : [
+					{type:'log',log:'to alert'},
+					{type:'alert',message:'test'},
+					{type:'log',log:'to confirm'},
+					{type:'confirm',message:'test',buttons:['A','B']},
+					
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });
