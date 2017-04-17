@@ -13,10 +13,7 @@ function openWorkflowFile(template,configFile) {
 		var workflow = require('./tests.js');
 		workflow.loadConfig(configFile);
 		
-		var workflowMenus = [{
-			label: 'Tests',
-			submenu : workflow.menu
-		},
+		var workflowMenus = [
 		{
 			label: 'Workflows',
 			submenu : workflow.workFlowMenu

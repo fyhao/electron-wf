@@ -73,16 +73,6 @@ module.exports.loadConfig = function loadConfig(configFile) {
 	workflowModule.setConfig(config);
 	// load plugins
 	loadPlugins(config);
-	excelFile = config.testDataExcelFile;
-	var testDataPrepMenus = [];
-	for(var i in config.testDataPrep) {
-		testDataPrepMenus.push({
-			label : 'Initialize Test Data for ' + i, i:i,click:function(item,win) {
-				workflowModule.initTestDataPrep(config.testDataPrep[item.i]);	
-			}
-		});
-	}
-	module.exports.menu = testDataPrepMenus;
 	
 	var workFlowMenus = [];
 	for(var i in config.workFlows) {
@@ -98,4 +88,3 @@ module.exports.loadConfig = function loadConfig(configFile) {
 }
 module.exports.getConfigObj = function() {return config;}
 var mainWin = null;
-//initTestDataPrep(config.testDataPrep.CRM);
