@@ -18,6 +18,7 @@ module.exports = {
 				{type:'evaljs',var:'result',code:"parseInt(vars['a1']) + parseInt(vars['a2'])"},
 				{type:'writeExcelCell',name:'excel',sheet:'Sheet1',cell:'C1',value:'##result##'},
 				{type:'saveExcel',name:'excel',file:__dirname + '/b.xlsx'},
+				{type:'deleteFile',file:__dirname + '/b.xlsx'},
 				{type:'log',log:'TestExcel done'},
 			]
 		}

@@ -14,6 +14,7 @@ module.exports = {
 				{type:'setVar',name:'filepath',value:__dirname + "/testcase.xlsx"},
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',savefile:__dirname + '/result.xlsx'},
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRowDummy',outputVars:['name']},
+				{type:'deleteFile',file:__dirname + '/result.xlsx'},
 				{type:'log',log:'TestExcelCase done'},
 				{type:'notExist'},
 			]
