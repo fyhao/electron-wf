@@ -24,6 +24,7 @@ module.exports = {
 				{type:'createFolder',folder:'c'},
 				{type:'deleteFolder',folder:'c'},
 				{type:'deleteFile',file:'c.txt'},
+				{type:'copyFolder', source:'zz',target:'xx'},
 			]
 		}
 	}
