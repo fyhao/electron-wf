@@ -181,4 +181,68 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('incrementVar', function() {
+	it('should able to pass when the var is an integer', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'a',value:1},
+						{type:'log',log:'value ##a##'},
+						{type:'incrementVar',name:'a'},
+						{type:'log',log:'value ##a##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to pass when the var is a string', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'a',value:"TEST"},
+						{type:'log',log:'value ##a##'},
+						{type:'incrementVar',name:'a'},
+						{type:'log',log:'value ##a##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to fail when the var is not defined', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'value ##a##'},
+						{type:'incrementVar',name:'a'},
+						{type:'log',log:'value ##a##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });
