@@ -245,4 +245,25 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('nonExist', function() {
+	it('should able to pass when it is nonExist case', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'nonExist'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+  });
 });

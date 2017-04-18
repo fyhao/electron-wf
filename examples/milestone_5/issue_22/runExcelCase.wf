@@ -16,7 +16,6 @@ module.exports = {
 				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRowDummy',outputVars:['name']},
 				{type:'deleteFile',file:__dirname + '/result.xlsx'},
 				{type:'log',log:'TestExcelCase done'},
-				{type:'notExist'},
 			]
 		},
 		processRow : {
