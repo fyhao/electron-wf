@@ -10,4 +10,7 @@ engines:
     checks:
       comma-dangle:
         enabled: false
+    checks:
+      global-require:
+        enabled: false
 # ... CONFIG CONTENT ...
