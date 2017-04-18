@@ -120,6 +120,7 @@ var StepProcessor = function(ctx, step, next) {
 			}
 		});
 	}
+	this.checkSpec = checkSpec;
 	this.process = function() {
 		if(def == null) {
 			process.nextTick(next);

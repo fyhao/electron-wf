@@ -45,7 +45,10 @@ var loadPlugins = function(config) {
 					config.workFlows[key] = cfg.workFlows[key];
 				}
 			}
-			checkWorkflowStepSpec(config);
+			if(!checkWorkflowStepSpec(config)) {
+				util.alert("Error check step spec");
+				return;
+			}
 		});
 	}
 }
@@ -58,16 +61,21 @@ stepModule.bootstrap();
 workflowModule.setStepModule(stepModule);
 
 var checkWorkflowStepSpec = function(config) {
-	if(typeof config.workFlows != 'undefined') {
-		for(var key in config.workFlows) {
-			var wf = config.workFlows[key];
-			if(wf.steps && wf.steps.length) {
-				wf.steps.forEach(function(step) {
-					//stepModule.checkSpec(step);
-				});
+	try {
+		if(typeof config.workFlows != 'undefined') {
+			for(var key in config.workFlows) {
+				var wf = config.workFlows[key];
+				if(wf.steps && wf.steps.length) {
+					wf.steps.forEach(function(step) {
+						stepModule.checkSpec(step);
+					});
+				}
 			}
 		}
+	} catch (e) {
+		return false;
 	}
+	return true;
 }
 
 module.exports.reloadConfig = function() {
@@ -85,10 +93,13 @@ module.exports.loadConfig = function loadConfig(configFile) {
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
 	workflowModule.setConfig(config);
-	checkWorkflowStepSpec(config);
+	
+	if(!checkWorkflowStepSpec(config)) {
+		util.alert("Error check step spec");
+		return;
+	}
 	// load plugins
 	loadPlugins(config);
-	
 	var workFlowMenus = [];
 	for(var i in config.workFlows) {
 		if(!config.workFlows[i].showInMenu) continue;

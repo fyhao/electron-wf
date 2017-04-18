@@ -1,14 +1,18 @@
 var assert = require('assert');
-var stepModule = require('../step.js');
 global.ProjRequire = function(module) {
 	return require(__dirname + '/../' + module);
 }
 
-describe('step.js', function() {
-  describe('bootstrap', function() {
+describe('tests.js', function() {
+  describe('tests', function() {
 	this.timeout(15000);
-    it('should run without error', function() {
-      stepModule.bootstrap();
+	var testsModule = null;
+    it('should able to initialize properly', function() {
+		testsModule = require('../tests.js');
+    });
+	it('should able to load a config', function() {
+		var configFile = __dirname + '/../examples/milestone_1/milestone_1.wf';
+		testsModule.loadConfig(configFile);
     });
   });
 });
