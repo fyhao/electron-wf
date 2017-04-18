@@ -38,8 +38,7 @@ var scanRootLevelFiles = function() {
 			var def = require(filepath);
 			var name = filename.replace('.js', '');
 			if(typeof stepDefinitions[name] != 'undefined') {
-				console.log('ERROR the step definition [' + name + '] exist');
-				process.exit(0);
+				throw new Error('ERROR the step definition [' + name + '] exist');
 			}
 			stepDefinitions[name] = def;
 		}
@@ -54,8 +53,7 @@ var scanFolders = function() {
 			var def = require(filepath);
 			var name = folder;
 			if(typeof stepDefinitions[name] != 'undefined') {
-				console.log('ERROR the step definition [' + name + '] exist');
-				process.exit(0);
+				throw new Error('ERROR the step definition [' + name + '] exist');
 			}
 			stepDefinitions[name] = def;
 		}
@@ -97,21 +95,27 @@ var StepProcessor = function(ctx, step, next) {
 		if(def == null) return;
 		if(typeof def.spec == 'undefined') {
 			console.log('Error spec function is missing for ' + step.type);
-			process.exit(0);
+			throw new Error("Error spec function is missing for " + step.type);
 		}
 		spec = def.spec();
+		if(spec == null) {
+			throw new Error("Spec is null");
+		}
 		if(typeof def.process == 'undefined') {
 			console.log('Error process function is missing for ' + step.type);
-			process.exit(0);
+			throw new Error('Error process function is missing for ' + step.type);
 		}
 	}
 	var checkSpec = function(step) {
+		if(spec == null) {
+			return;
+		}
 		// checkRequired Fields
 		spec.fields.forEach(function(field) {
 			if(field.required) {
 				if(typeof step[field.name] == 'undefined') {
-					console.log('Error step did not have required field ' + filed.name);
-					process.exit(0);
+					console.log('Error step did not have required field ' + field.name);
+					throw new Error('Error step did not have required field ' + field.name);
 				}
 			}
 		});
