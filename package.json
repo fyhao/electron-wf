@@ -70,7 +70,7 @@
     "es6-symbol": "3.1.0",
     "escape-string-regexp": "1.0.5",
     "execspawn": "1.0.1",
-    "exceljs": "0.2.38",
+    "exceljs": "0.3.1",
     "extend": "3.0.0",
     "expand-template": "1.0.3",
     "extended": "0.0.6",
@@ -130,7 +130,7 @@
     "minimist": "0.0.8",
     "mime-types": "2.1.13",
     "mkdirp": "0.5.1",
-    "moment": "2.11.2",
+    "moment": "2.15.2",
     "ms": "0.7.2",
     "mssql": "3.3.0",
     "mysql": "2.13.0",
@@ -158,7 +158,7 @@
     "promise": "7.1.1",
     "punycode": "1.4.1",
     "pullstream": "0.4.1",
-    "qs": "6.3.0",
+    "qs": "6.3.2",
     "rc": "1.1.6",
     "pump": "1.0.2",
     "readable-stream": "1.0.34",
@@ -214,7 +214,7 @@
     "example": "examples"
   },
   "scripts": {
-	"test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
+    "test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
