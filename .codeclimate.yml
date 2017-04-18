@@ -5,7 +5,7 @@ engines:
     # ... CONFIG CONTENT ...
     checks:
       complexity:
-        enabled: true
+        enabled: false
     # ... CONFIG CONTENT ...
     checks:
       comma-dangle:
