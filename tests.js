@@ -45,6 +45,7 @@ var loadPlugins = function(config) {
 					config.workFlows[key] = cfg.workFlows[key];
 				}
 			}
+			checkWorkflowStepSpec(config);
 		});
 	}
 }
@@ -55,6 +56,19 @@ var workflowModule = ProjRequire('./workflow_engine.js');
 var stepModule = require('./step.js');
 stepModule.bootstrap();
 workflowModule.setStepModule(stepModule);
+
+var checkWorkflowStepSpec = function(config) {
+	if(typeof config.workFlows != 'undefined') {
+		for(var key in config.workFlows) {
+			var wf = config.workFlows[key];
+			if(wf.steps && wf.steps.length) {
+				wf.steps.forEach(function(step) {
+					//stepModule.checkSpec(step);
+				});
+			}
+		}
+	}
+}
 
 module.exports.reloadConfig = function() {
 	loadConfig(lastConfigFile);
@@ -71,6 +85,7 @@ module.exports.loadConfig = function loadConfig(configFile) {
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
 	workflowModule.setConfig(config);
+	checkWorkflowStepSpec(config);
 	// load plugins
 	loadPlugins(config);
 	

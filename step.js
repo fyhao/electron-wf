@@ -6,6 +6,10 @@ module.exports = {
 	processStep : function(ctx, step, next) {
 		_processStep(ctx, step, next);
 	}
+	,
+	checkSpec : function(step) {
+		_checkSpec(step);
+	}
 };
 
 // IMPORT
@@ -61,7 +65,12 @@ var scanNodeModules = function() {
 	//TODO
 }
 // ENDREGION _bootstrap
-
+// REGION _checkSpec
+var _checkSpec = function(step) {
+	var pro = new StepProcessor({}, step, function() {});
+	pro.checkSpec(step);
+}
+// ENDREGION _checkSpec
 // REGION _processStep
 
 var _processStep = function(ctx, step, next) {
@@ -112,7 +121,7 @@ var StepProcessor = function(ctx, step, next) {
 			process.nextTick(next);
 			return; // if def not found, silent exit
 		}
-		checkSpec(step);
+		//checkSpec(step);
 		def.process(ctx, step, next);
 	}
 	init();
