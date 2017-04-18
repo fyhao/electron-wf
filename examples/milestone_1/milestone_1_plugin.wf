@@ -22,6 +22,6 @@ module.exports = {
 	}
 	,
 	plugins : [
-		__dirname + '\\milestone_1_plugin_2.wf'
+		__dirname + '/milestone_1_plugin_2.wf'
 	]
 }
