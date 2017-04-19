@@ -462,4 +462,66 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  
+  
+  describe('getStringBetween', function() {
+    it('should able to getStringBetween with different start, end', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'source',value:'abcdefgh'},
+						{type:'getStringBetween',var:'source',start:'abc',end:'fgh',result:'output'},
+						{type:'assert',expected:'de',actual:'##output##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to getStringBetween with same start, end', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'source',value:'abcdefabc'},
+						{type:'getStringBetween',var:'source',start:'abc',end:'abc',result:'output'},
+						{type:'assert',expected:'def',actual:'##output##'},
+						{type:'setVar',name:'source',value:'abcdefabcghiabc'},
+						{type:'getStringBetween',var:'source',start:'abc',end:'abc',result:'output'},
+						{type:'assert',expected:'def',actual:'##output##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to getStringBetween with blank start and valid end', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'source',value:'abcdefabc'},
+						{type:'getStringBetween',var:'source',start:'',end:'def',result:'output'},
+						{type:'assert',expected:'abc',actual:'##output##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });
