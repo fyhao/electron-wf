@@ -91,7 +91,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 					inputVars[i] = ctx.vars[i];
 				}
 			}
-			executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars}, function(outputOpts) {
+			executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
 				if(outputOpts.outputVars) {
 					for(var i in outputOpts.outputVars) {
 						ctx.vars[i] = outputOpts.outputVars[i];
