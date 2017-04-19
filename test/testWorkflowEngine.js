@@ -193,12 +193,13 @@ describe('workflow_engine.js', function() {
 						{type:'log',log:'value ##a##'},
 						{type:'incrementVar',name:'a'},
 						{type:'log',log:'value ##a##'},
+						{type:'assert',expected:2,actual:'##a##'},
 					]
 				}
 			}
 		};
 		workflowModule.setConfig(config);
-		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
 			console.log('done');
 			done();
 		});	
@@ -265,5 +266,200 @@ describe('workflow_engine.js', function() {
 		});	
     });
 	
+  });
+  
+  describe('runLoop', function() {
+	it('should able to runLoop an array with one level', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Looping an array'},
+						{type:'setVar',name:'someArray',value:['1','2','3']},
+						{type:'runLoop',array:'someArray',wf:'eachItem',item:'theItem'},
+						{type:'log',log:'afterLoop'}
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'log',log:'for each item ##theItem##'},
+						
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+	
+	it('should able to runLoop an array with two level', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Looping an array'},
+						{type:'setVar',name:'someArray',value:['1','2','3']},
+						{type:'runLoop',array:'someArray',wf:'eachItem',item:'theItem'},
+						{type:'log',log:'afterLoop'}
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'log',log:'for each item ##theItem## start'},
+						{type:'setVar',name:'innerArray',value:['4','5']},
+						{type:'runLoop',array:'innerArray',wf:'innerItem',item:'theInner'},
+						{type:'log',log:'for each item ##theItem## end ** ##innerItemApple##'},
+					]
+				}
+				,
+				innerItem:{
+					steps : [
+						{type:'log',log:'for inner item ##theInner##'},
+						{type:'setVar',name:'innerItemApple',value:'apple ##theInner##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+	
+	it('should able to runLoop without an array', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Looping an array'},
+						{type:'runLoop',array:'someArray',wf:'eachItem',item:'theItem'},
+						{type:'log',log:'afterLoop'}
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'log',log:'for each item ##theItem## start'},
+						{type:'setVar',name:'innerArray',value:['4','5']},
+						{type:'runLoop',array:'innerArray',wf:'innerItem',item:'theInner'},
+						{type:'log',log:'for each item ##theItem## end ** ##innerItemApple##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+	
+	it('should able to runLoop an array with default item name', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Looping an array'},
+						{type:'setVar',name:'someArray',value:['1','2','3']},
+						{type:'runLoop',array:'someArray',wf:'eachItem'},
+						{type:'assert',expected:3,actual:'##item##'},
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'log',log:'for each item ##item##'},
+						
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+	
+	it('should able to runLoop an array with outputVars defined', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Looping an array'},
+						{type:'setVar',name:'someArray',value:['1','2','3']},
+						{type:'runLoop',array:'someArray',wf:'eachItem',outputVars:['someResult']},
+						{type:'log',log:'afterLoop ##someResult##'},
+						{type:'assert',expected:2,actual:'##someResult##'},
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'log',log:'for each item ##item##'},
+						{type:'setVar',name:'someResult',value:'2'},
+						{type:'assert',expected:2,actual:'##someResult##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+  });
+  
+  describe('assert', function() {
+	it('should able to run without assert inject into executeWorkflow', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Testing on assert'},
+						{type:'setVar',name:'apple',value:'e'},
+						{type:'assert',expected:'e',actual:'##apple##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to run with assert inject into executeWorkflow', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'log',log:'Testing on assert'},
+						{type:'setVar',name:'apple',value:'e'},
+						{type:'assert',expected:'e',actual:'##apple##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
   });
 });
