@@ -79,8 +79,8 @@ module.exports = {
 		},
 		handleHttpbinHeaders : {
 			steps : [
-				{type:'http',url:'https://httpbin.org/headers',headers:{'someKey':'##arg2##'},var:'body'},
-				{type:'evaljs',var:'actual',code:'vars["body"].indexOf("##arg2##") > -1 ? "yes" : "no"'},
+				{type:'http',url:'https://httpbin.org/headers',headers:{'someKey':'test1234'},var:'body'},
+				{type:'evaljs',var:'actual',code:'vars["body"].indexOf("test1234") > -1 ? "yes" : "no"'},
 			]
 		}
 		,

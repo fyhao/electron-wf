@@ -146,12 +146,19 @@ describe('workflow_engine.js', function() {
   
   describe('runExcelCase.wf', function() {
 	it('should able to run Excel Test Case', function(done) {
+		var Mitm = require("mitm")
+		var mitm = Mitm()
+		mitm.on("request", function(req, res) {
+		  res.statusCode = 200
+		  res.end('<xml>Sample Slide Show ' + req.headers.somekey + '</xml>');
+		})
 		var configFile = '../examples/milestone_5/issue_22/runExcelCase.wf';
 		delete require.cache[require.resolve(configFile)]; // delete require cache
 		config = require(configFile); // require again
 		workflowModule.setConfig(config);
-		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {}, function() {
+		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {assert:assert}, function() {
 			console.log('done');
+			mitm.disable()
 			done();
 		});	
     });
@@ -524,4 +531,5 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
 });
