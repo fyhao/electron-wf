@@ -3,7 +3,7 @@ node_js:
   - stable
 after_success:
   - npm run coverage
-  - npm run release
+ 
 env:
   global:
     - secure: >-
