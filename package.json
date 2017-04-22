@@ -221,7 +221,7 @@
 	"pack": "build --dir",
     "dist": "build",
     "dist-x": "build -ml",
-    "release": "build"
+    "release": "build && build --publish onTagOrDraft"
   },
   "repository": {
     "type": "git",
