@@ -40,7 +40,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 16gK17SsYWLCBRxeDTZbTFAvu+38JModzNSC0F8gZBI1xcbchnwFJ//gWIo4HlTO # your encrypted token from GitHub
-  draft: true
+  draft: false
   prerelease: false
   on:
-    appveyor_repo_tag: true        # deploy on tag push only
+    appveyor_repo_tag: false        # deploy on tag push only
