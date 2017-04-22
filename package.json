@@ -221,7 +221,8 @@
 	"pack": "build --dir",
     "dist": "build",
     "dist-x": "build -ml",
-    "release": "build && build --publish onTagOrDraft"
+    "release": "build",
+	"postinstall": "install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -242,6 +243,28 @@
       "**",
       "package.json"
     ],
-    "publish": null
+	"dmg": {		    
+		"contents": [		      
+			{		        
+			"x": 130,		        
+			"y": 220		      
+			},		      
+			{		        
+			"x": 410,		        
+			"y": 220,		        
+			"type": "link",		        
+			"path": "/Applications"		      
+			}		    
+		]		  
+	},		  
+	"win": {		    
+		"target": "nsis"		
+	},		  
+	"linux": {		    
+		"target": [		      
+		"AppImage",		      
+		"deb"		    
+		]		  
+	}
   }
 }
