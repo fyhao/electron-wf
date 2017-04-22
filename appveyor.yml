@@ -30,14 +30,16 @@ test_script:
   - npm run release
   
   
-  
+artifacts:
+  - path: dist/*.exe
+    name: Installer
+
 deploy:
   release: electron-wf-v$(appveyor_build_version)
   description: 'Release description'
   provider: GitHub
   auth_token:
     secure: 16gK17SsYWLCBRxeDTZbTFAvu+38JModzNSC0F8gZBI1xcbchnwFJ//gWIo4HlTO # your encrypted token from GitHub
-  artifact: /dist/*            # upload all NuGet packages to release assets
   draft: true
   prerelease: false
   on:
