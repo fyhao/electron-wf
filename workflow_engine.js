@@ -12,7 +12,7 @@ var stepModule = null;
 
 var executeWorkFlow = function(wf, opts, donefn) {
 	wf = util.clone(wf);
-	if(typeof opts == 'undefined') var opts = {};
+	if(typeof opts === 'undefined') var opts = {};
 	var ctx = {};
 	
 	ctx.openFileWritesHandler = {};
@@ -23,8 +23,9 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	ctx.config = config;
 	ctx.opts = opts;
 	
-	if(typeof opts.inputVars != 'undefined') {
+	if(typeof opts.inputVars !== 'undefined') {
 		for(var i in opts.inputVars) {
+			if(!Object.prototype.hasOwnProperty.call(opts.inputVars,i)) continue;
 			ctx.vars[i] = opts.inputVars[i];
 		}
 	}
@@ -35,6 +36,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 		else {
 			for(var k in ctx.vars) {
+				if(!Object.prototype.hasOwnProperty.call(ctx.vars,k)) continue;
 				c = util.replaceAll(c, '##' + k + '##', ctx.vars[k]);
 			}
 		}
@@ -42,7 +44,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	}
 	var replaceVarsStep = function(step) {
 		for(var i in step) {
-			if(typeof step[i] != 'string') {
+			if(!Object.prototype.hasOwnProperty.call(step,i)) continue;
+			if(typeof step[i] !== 'string') {
 				step[i] = replaceVarsStep(step[i]);
 			}
 			else {
@@ -60,13 +63,14 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 		else {
 			var outputVars = {};
-			if(typeof opts.outputVars != 'undefined') {
+			if(typeof opts.outputVars !== 'undefined') {
 				opts.outputVars.forEach(function(i) {
 					outputVars[i] = ctx.vars[i];
 				});
 			}
-			if(typeof opts.inputVars != 'undefined' && typeof opts.inputVars.outputall != 'undefined' &&  opts.inputVars.outputall) {
+			if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
 				for(var i in ctx.vars) {
+					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
 					outputVars[i] = ctx.vars[i];
 				}
 			}
@@ -84,16 +88,18 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		step = replaceVarsStep(step);
 		
 		// search available work flow
-		if(typeof config.workFlows[step.type] != 'undefined') {
+		if(typeof config.workFlows[step.type] !== 'undefined') {
 			var inputVars = step;
 			if(typeof step.inputall != 'undefined' && step.inputall) {
 				for(var i in ctx.vars) {
+					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
 					inputVars[i] = ctx.vars[i];
 				}
 			}
 			executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
 				if(outputOpts.outputVars) {
 					for(var i in outputOpts.outputVars) {
+						if(!Object.prototype.hasOwnProperty.call(outputOpts.outputVars,i)) continue;
 						ctx.vars[i] = outputOpts.outputVars[i];
 					}
 				}
