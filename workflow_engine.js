@@ -90,7 +90,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		// search available work flow
 		if(typeof config.workFlows[step.type] !== 'undefined') {
 			var inputVars = step;
-			if(typeof step.inputall != 'undefined' && step.inputall) {
+			if(typeof step.inputall !== 'undefined' && step.inputall) {
 				for(var i in ctx.vars) {
 					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
 					inputVars[i] = ctx.vars[i];
