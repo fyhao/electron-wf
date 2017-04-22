@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 module.exports.getCache = function(key) {
 	var str = fs.readFileSync(cacheFile, 'utf8').toString();
 	try {
@@ -6,7 +7,7 @@ module.exports.getCache = function(key) {
 	} catch (e) {
 		
 	}
-	return cache;
+	return cache[key];
 }
 
 module.exports.putCache = function(key, value) {
