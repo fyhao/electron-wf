@@ -27,3 +27,4 @@ test_script:
   - node --version
   - .\node_modules\.bin\npm --version
   - npm test
+  - npm run release
