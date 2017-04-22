@@ -221,7 +221,7 @@
 	"pack": "build --dir",
     "dist": "build",
     "dist-x": "build -ml",
-    "release": "build",
+    "release": "build --publish onTagOrDraft",
 	"postinstall": "install-app-deps"
   },
   "repository": {
