@@ -35,7 +35,7 @@ artifacts:
     name: Installer
 
 deploy:
-  release: electron-wf-v$(appveyor_build_version)-$(appveyor_job_name)
+  release: electron-wf-v$(appveyor_build_version)
   description: 'Release description'
   provider: GitHub
   auth_token:
