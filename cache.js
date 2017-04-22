@@ -14,5 +14,5 @@ module.exports.putCache = function(key, value) {
 	fs.writeFileSync(cacheFile, JSON.stringify(cache));
 }
 
-var cacheFile = __dirname + "/data/cache.json";
+var cacheFile = path.join(__dirname, 'data', 'cache.json');
 var cache = {};
