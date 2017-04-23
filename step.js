@@ -1,3 +1,8 @@
+// IMPORT
+var fs = require('fs');
+var util = require('./lib/util.js');
+var path = require('path');
+
 module.exports = {
 	bootstrap : function() {
 		_bootstrap();
@@ -11,10 +16,6 @@ module.exports = {
 		_checkSpec(step);
 	}
 };
-
-// IMPORT
-var fs = require('fs');
-var util = require('./lib/util.js');
 
 // public variable
 var stepDefinitions = [];
@@ -30,7 +31,7 @@ var _bootstrap = function() {
 	scanNodeModules();
 }
 var scanRootLevelFiles = function() {
-	var list = fs.readdirSync(__dirname + "/" + LIB_STEPS_PATH);
+	var list = fs.readdirSync(path.join(__dirname, LIB_STEPS_PATH)); 
 	list.forEach(function(filename) {
 		if(filename.lastIndexOf('.js') > -1) {
 			var filepath = './' + LIB_STEPS_PATH + '/' + filename;
@@ -45,14 +46,14 @@ var scanRootLevelFiles = function() {
 	});
 }
 var scanFolders = function() {
-	var list = fs.readdirSync(__dirname + "/" + LIB_STEPS_PATH);
+	var list = fs.readdirSync(path.join(__dirname, LIB_STEPS_PATH));
 	list.forEach(function(folder) {
-		if(folder.lastIndexOf('.js') == -1) {
+		if(folder.lastIndexOf('.js') === -1) {
 			var filepath = './' + LIB_STEPS_PATH + '/' + folder + '/init.js';
 			delete require.cache[require.resolve(filepath)]; // delete require cache
 			var def = require(filepath);
 			var name = folder;
-			if(typeof stepDefinitions[name] != 'undefined') {
+			if(typeof stepDefinitions[name] !== 'undefined') {
 				throw new Error('ERROR the step definition [' + name + '] exist');
 			}
 			stepDefinitions[name] = def;
@@ -92,28 +93,28 @@ var StepProcessor = function(ctx, step, next) {
 		}
 	}
 	var findSpec = function() {
-		if(def == null) return;
+		if(def === null) return;
 		if(typeof def.spec == 'undefined') {
 			console.log('Error spec function is missing for ' + step.type);
 			throw new Error("Error spec function is missing for " + step.type);
 		}
 		spec = def.spec();
-		if(spec == null) {
+		if(spec === null) {
 			throw new Error("Spec is null");
 		}
-		if(typeof def.process == 'undefined') {
+		if(typeof def.process === 'undefined') {
 			console.log('Error process function is missing for ' + step.type);
 			throw new Error('Error process function is missing for ' + step.type);
 		}
 	}
 	var checkSpec = function(step) {
-		if(spec == null) {
+		if(spec === null) {
 			return;
 		}
 		// checkRequired Fields
 		spec.fields.forEach(function(field) {
 			if(field.required) {
-				if(typeof step[field.name] == 'undefined') {
+				if(typeof step[field.name] === 'undefined') {
 					console.log('Error step did not have required field ' + field.name);
 					throw new Error('Error step did not have required field ' + field.name);
 				}
@@ -122,11 +123,10 @@ var StepProcessor = function(ctx, step, next) {
 	}
 	this.checkSpec = checkSpec;
 	this.process = function() {
-		if(def == null) {
+		if(def === null) {
 			process.nextTick(next);
 			return; // if def not found, silent exit
 		}
-		//checkSpec(step);
 		def.process(ctx, step, next);
 	}
 	init();
