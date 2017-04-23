@@ -531,5 +531,74 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
-  
+  describe('testDataPrep', function() {
+    
+	it('should able to run testDataPrep', function(done) {
+		var config = {
+			"db" : {
+				"cbpdb" : {
+					user:'test',
+					password:'test',
+					server : 'localhost\\sqlserver2012',
+					database : 'cbp'
+					,
+					type:'nothing'
+				}
+			},
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'testDataPrep', info: {
+							db : 'cbpdb',
+							testDataExcelFile : path.join(__dirname, '../examples/milestone_6/issue_32/testdata.xlsx'),
+							sheet : 'Sheet1',
+							startRow : 2,
+							cells : ['A','B','C','D'],
+							dateCells : ['E'],
+							sql_templates : [
+								"insert into sometable (a,b) values ('##A##','##B##')",
+								
+								
+							]
+						}}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
+  describe('sql', function() {
+    
+	it('should able to run sql', function(done) {
+		var config = {
+			"db" : {
+				"cbpdb" : {
+					user:'test',
+					password:'test',
+					server : 'localhost\\sqlserver2012',
+					database : 'cbp'
+					,
+					type:'nothing'
+				}
+			},
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'sql',ds:'cbpdb',sql:'delete from sometable'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });
