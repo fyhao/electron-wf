@@ -6,12 +6,11 @@ engines:
     checks:
       complexity:
         enabled: false
-    # ... CONFIG CONTENT ...
-    checks:
       comma-dangle:
         enabled: false
-    checks:
       global-require:
+        enabled: false
+      no-loop-func:
         enabled: false
 # ... CONFIG CONTENT ...
 
