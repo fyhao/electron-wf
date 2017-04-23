@@ -18,28 +18,26 @@ var loadPlugins = function(config) {
 			delete require.cache[require.resolve(filepath)];
 			var cfg = require(filepath);
 			// load cfg.plugins
-			if(typeof cfg.plugins != 'undefined' && cfg.plugins.length) {
+			if(typeof cfg.plugins !== 'undefined' && cfg.plugins.length) {
 				loadPlugins(cfg);
 			}
 			// load cfg.db
-			if(typeof cfg.db != 'undefined') {
+			if(typeof cfg.db !== 'undefined') {
 				for(var key in cfg.db) {
 					if(config.db.hasOwnProperty(key)) {
 						dialog.showMessageBox({message:'There is duplicate db key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit', buttons:['OK']});
-						process.exit(0);
-						return;
+						throw new Error('There is duplicate db key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit');
 					}
 					// append db object into parent config
 					config.db[key] = cfg.db[key];
 				}
 			}
 			// load cfg.workFlows
-			if(typeof cfg.workFlows != 'undefined') {
+			if(typeof cfg.workFlows !== 'undefined') {
 				for(var key in cfg.workFlows) {
 					if(config.workFlows.hasOwnProperty(key)) {
 						dialog.showMessageBox({message:'There is duplicate workFlows key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit', buttons:['OK']});
-						process.exit(0);
-						return;
+						throw new Error('There is duplicate workFlows key [' + key + '] defined when loading plugin [' + filepath + '], the program will exit');
 					}
 					// append workFlows object into parent config
 					config.workFlows[key] = cfg.workFlows[key];
@@ -62,7 +60,7 @@ workflowModule.setStepModule(stepModule);
 
 var checkWorkflowStepSpec = function(config) {
 	try {
-		if(typeof config.workFlows != 'undefined') {
+		if(typeof config.workFlows !== 'undefined') {
 			for(var key in config.workFlows) {
 				var wf = config.workFlows[key];
 				if(wf.steps && wf.steps.length) {
