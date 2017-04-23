@@ -12,6 +12,8 @@ engines:
         enabled: false
       no-loop-func:
         enabled: false
+      guard-for-in:
+        enabled: false
 # ... CONFIG CONTENT ...
 
 exclude_paths:
