@@ -65,7 +65,7 @@ const template = [
 				label : 'Edit config',
 				click : function() {
 					dialog.showOpenDialog(function (fileNames) {
-						if(typeof fileNames == 'undefined') return;
+						if(typeof fileNames === 'undefined') return;
 						var configFile;
 						configFile = fileNames[0];
 						var win = editor.createEditWindow({configFile:configFile});
@@ -77,7 +77,7 @@ const template = [
 				label : 'Load config',
 				click : function() {
 					dialog.showOpenDialog(function (fileNames) {
-						if(typeof fileNames == 'undefined') return;
+						if(typeof fileNames === 'undefined') return;
 						var configFile;
 						configFile = fileNames[0];
 						openWorkflowFile(template, configFile)

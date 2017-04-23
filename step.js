@@ -38,7 +38,7 @@ var scanRootLevelFiles = function() {
 			delete require.cache[require.resolve(filepath)]; // delete require cache
 			var def = require(filepath);
 			var name = filename.replace('.js', '');
-			if(typeof stepDefinitions[name] != 'undefined') {
+			if(typeof stepDefinitions[name] !== 'undefined') {
 				throw new Error('ERROR the step definition [' + name + '] exist');
 			}
 			stepDefinitions[name] = def;
@@ -88,7 +88,7 @@ var StepProcessor = function(ctx, step, next) {
 	}
 	
 	var findDef = function() {
-		if(typeof stepDefinitions[step.type] != 'undefined') {
+		if(typeof stepDefinitions[step.type] !== 'undefined') {
 			def = stepDefinitions[step.type];
 		}
 	}

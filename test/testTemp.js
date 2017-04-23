@@ -1,7 +1,8 @@
+var path = require('path');
 var assert = require('assert');
 var stepModule = require('../workflow_engine.js');
 global.ProjRequire = function(module) {
-	return require(__dirname + '/../' + module);
+	return require(path.join(__dirname, '/../' + module)); 
 }
 var workflowModule = ProjRequire('./workflow_engine.js');
 // initializing

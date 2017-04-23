@@ -1,6 +1,7 @@
+var path = require('path');
 var assert = require('assert');
 global.ProjRequire = function(module) {
-	return require(__dirname + '/../' + module);
+	return require(path.join(__dirname, '/../' + module)); 
 }
 
 describe('tests.js', function() {
@@ -11,7 +12,7 @@ describe('tests.js', function() {
 		testsModule = require('../tests.js');
     });
 	it('should able to load a config', function() {
-		var configFile = __dirname + '/../examples/milestone_1/milestone_1.wf';
+		var configFile = path.join(__dirname, '/../examples/milestone_1/milestone_1.wf');
 		testsModule.loadConfig(configFile);
     });
   });
