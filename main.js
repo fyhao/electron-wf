@@ -1,12 +1,15 @@
 const {app, BrowserWindow, Menu, dialog} = require('electron')
 const path = require('path')
-const url = require('url')
+const url = require('url');
+const fs = require('fs');
+const os = require('os');
 var util = require('./lib/util.js');
 var tests = require('./tests.js');
 var editor = require('./editor.js');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+var currentOpenedConfigFile = null;
 function openWorkflowFile(template,configFile) {
 	try {
 		var workflow = require('./tests.js');
@@ -34,6 +37,7 @@ function openWorkflowFile(template,configFile) {
 		});
 		menu = Menu.buildFromTemplate(temp)
 		win.setMenu(menu);
+		currentOpenedConfigFile = configFile;
 	} catch (e) {
 		util.alert('Invalid properties file');
 	}
@@ -80,6 +84,32 @@ const template = [
 						
 					});
 					
+				}
+			},
+			{
+				label : 'Generate run.bat/run.sh',
+				click : function() {
+					if(__dirname.indexOf('.asar') > -1) {
+						var sourceDir = path.join(path.dirname(__dirname), '../');
+						var sourceDirName = path.basename(sourceDir);
+						var exePath = path.join(sourceDir, sourceDirName + '.exe');
+						var batName = '';
+						var plat = os.platform();
+						if(plat.indexOf('win') > -1) {
+							batName = 'run.bat';
+						}
+						else {
+							batName = 'run.sh';
+						}
+						
+						var batPath = path.join(path.dirname(currentOpenedConfigFile), batName);
+						var content = '"' + exePath + '" "' + currentOpenedConfigFile + '"';
+						if(fs.existsSync(batPath)) {
+							fs.unlinkSync(batPath);
+						}
+						fs.writeFileSync(batPath, content);
+						util.alert('Generated ' + batPath);
+					}
 				}
 			}
 		]
