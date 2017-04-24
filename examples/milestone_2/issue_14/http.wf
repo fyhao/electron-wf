@@ -16,6 +16,7 @@ module.exports = {
 				{type:'evaljs',var:'temp',code:"vars['resultJson'].temp"},
 				{type:'evaljs',var:'city',code:"vars['resultJson'].city"},
 				{type:'log',log:'The temperature is ##temp## in city ##city##'},
+				{type:'http',url:'http://api.imgshow-apps.com/?api=1&k=q:name=weather,lat=47.7597038,lng=-3.3292314,display=info',method:'POST'},
 			]
 		}
 	}

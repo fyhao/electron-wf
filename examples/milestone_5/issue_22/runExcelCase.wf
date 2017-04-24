@@ -33,6 +33,7 @@ module.exports = {
 				{type:'if',if:'equal',var:'type',pattern:'incrementTest',yes_subflow:'handleIncrement'},
 				{type:'if',if:'equal',var:'type',pattern:'httpbin',yes_subflow:'handleHttpbin'},
 				{type:'if',if:'equal',var:'type',pattern:'ssh',yes_subflow:'handleSsh'},
+				{type:'if',if:'equal',var:'type',pattern:'replaceAll',remarks:'Just for dummy testing without yes_subflow no_subflow'},
 				
 				{type:'evaljs',var:'result',code:'vars["expected"] == vars["actual"] ? "passed" : "failed"'},
 				{type:'log',log:'##name##: expected ##expected## actual ##actual## result ##result##'},
