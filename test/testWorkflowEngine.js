@@ -654,4 +654,56 @@ describe('workflow_engine.js', function() {
 		});	
 	});
   });
+  
+  
+  
+  describe('zip', function() {
+	it('should able to zip files', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'deleteFolder',folder:'examples/milestone_6/issue_26/target/'},
+						{type:'createFolder',folder:'examples/milestone_6/issue_26/target/'},
+						{type:'zip',include:'examples/milestone_6/issue_27/first',file:'examples/milestone_6/issue_26/target/test.zip'},
+						{type:'listFiles',var:'result',folder:'examples/milestone_6/issue_26/target/'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:1,actual:'##len##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to unzip files', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'unzip',location:'examples/milestone_6/issue_26/target/',file:'examples/milestone_6/issue_26/target/test.zip'},
+						{type:'listFiles',var:'result',folder:'examples/milestone_6/issue_26/target/'},
+						{type:'evaljs',var:'res',code:'vars["result"].length > 1 ? "true": "false"'},
+						{type:'assert',expected:'true',actual:'##res##'},
+						{type:'deleteFolder',folder:'examples/milestone_6/issue_26/target/'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	
+  });
+  
 });
