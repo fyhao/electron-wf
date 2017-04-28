@@ -133,7 +133,7 @@ Menu.setApplicationMenu(menu);
   
   
   
-	if(process.argv.length == 2) {
+	if(process.argv.length === 2) {
 		openWorkflowFile(template, process.argv[1]);
 	}
 	
