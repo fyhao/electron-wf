@@ -228,8 +228,7 @@
     "type": "git",
     "url": "git+https://github.com/fyhao/electron-wf.git"
   },
-  "author": "fyhao",
-  "email" : "fyhao1@gmail.com",
+  "author": "fyhao <fyhao1@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fyhao/electron-wf/issues"
