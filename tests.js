@@ -10,10 +10,10 @@ var xml2js = require('xml2js')
 var config = null;
 var excelFile = null;
 global.ProjRequire = function(module) {
-	return require(__dirname + '/' + module);
+	return require(path.join(__dirname, module));
 }
 var loadPlugins = function(config) {
-	if(typeof config.plugins != 'undefined' && config.plugins.length) {
+	if(typeof config.plugins !== 'undefined' && config.plugins.length) {
 		config.plugins.forEach(function(filepath) {
 			delete require.cache[require.resolve(filepath)];
 			var cfg = require(filepath);
