@@ -94,7 +94,7 @@ var StepProcessor = function(ctx, step, next) {
 	}
 	var findSpec = function() {
 		if(def === null) return;
-		if(typeof def.spec == 'undefined') {
+		if(typeof def.spec === 'undefined') {
 			console.log('Error spec function is missing for ' + step.type);
 			throw new Error("Error spec function is missing for " + step.type);
 		}
