@@ -3,7 +3,7 @@ const path = require('path')
 const url = require('url')
 var fs = require('fs');
 var util = require('./lib/util.js');
-console.log(1);
+
 var win;
 var menuTemplate = [];
 module.exports.createEditWindow = function createEditWindow (input) {
