@@ -88,10 +88,7 @@ module.exports.setWindow = function(win) {
 var lastConfigFile = null;
 module.exports.loadConfig = function loadConfig(configFile) {
 	lastConfigFile = configFile;
-	delete require.cache[require.resolve(configFile)]; // delete require cache
-	config = require(configFile); // require again
-	workflowModule.setConfig(config);
-	
+	var config = workflowModule.importConfig(configFile);
 	if(!checkWorkflowStepSpec(config)) {
 		util.alert("Error check step spec");
 		return;

@@ -19,10 +19,8 @@ describe('workflow_engine.js', function() {
   
   describe('http.wf', function() {
 	it('should able to perform http operation', function(done) {
-		var configFile = '../examples/milestone_2/issue_14/http.wf';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		var config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var configFile = './examples/milestone_2/issue_14/http.wf';
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestHttp'], {}, function() {
 			console.log('done');
 			done();
@@ -32,10 +30,8 @@ describe('workflow_engine.js', function() {
   
   describe('copyFolder.wf', function() {
 	it('should able to copy folder', function(done) {
-		var configFile = '../examples/milestone_2/issue_4/copyFolder.wf';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var configFile = './examples/milestone_2/issue_4/copyFolder.wf';
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['PerformWork'], {}, function() {
 			console.log('done');
 			done();
@@ -45,10 +41,8 @@ describe('workflow_engine.js', function() {
   
   describe('wait.wf', function() {
 	it('should able to wait', function(done) {
-		var configFile = '../examples/milestone_2/issue_15/wait.wf';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var configFile = './examples/milestone_2/issue_15/wait.wf';
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestWait'], {}, function() {
 			console.log('done');
 			done();
@@ -57,14 +51,12 @@ describe('workflow_engine.js', function() {
   });
   
   describe('file.wf', function() {
-	var path = 'examples/milestone_5/issue_20';
-	var wfFile = '../' + path + '/file.wf';
+	var path = './examples/milestone_5/issue_20';
+	var wfFile = path + '/file.wf';
 	var testFile = path + '/a.txt';
 	it('should able to create and overwrite test file', function(done) {
 		
-		delete require.cache[require.resolve(wfFile)]; // delete require cache
-		config = require(wfFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestFileWrite'], {}, function() {
 			var fs = require('fs');
 			var con = fs.readFileSync(testFile).toString();
@@ -74,9 +66,7 @@ describe('workflow_engine.js', function() {
     });
 	it('should able to create and append test file', function(done) {
 		
-		delete require.cache[require.resolve(wfFile)]; // delete require cache
-		config = require(wfFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestFileAppend'], {}, function() {
 			var fs = require('fs');
 			var con = fs.readFileSync(testFile).toString();
@@ -86,27 +76,21 @@ describe('workflow_engine.js', function() {
     });
 	it('should able to read file', function(done) {
 		
-		delete require.cache[require.resolve(wfFile)]; // delete require cache
-		config = require(wfFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestFileRead'], {}, function() {
 			done();
 		});
     });
 	it('should able to copy file', function(done) {
 		
-		delete require.cache[require.resolve(wfFile)]; // delete require cache
-		config = require(wfFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestFileCopy'], {}, function() {
 			done();
 		});
     });
 	it('should able to delete file', function(done) {
 		
-		delete require.cache[require.resolve(wfFile)]; // delete require cache
-		config = require(wfFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['DeleteFile'], {}, function() {
 			var fs = require('fs');
 			assert.equal(true, !fs.existsSync(testFile));
@@ -118,10 +102,8 @@ describe('workflow_engine.js', function() {
   
   describe('excel.wf', function() {
 	it('should able to open, read, write, save the Excel file', function(done) {
-		var configFile = '../examples/milestone_5/issue_21/excel.wf';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var configFile = './examples/milestone_5/issue_21/excel.wf';
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcel'], {}, function() {
 			console.log('done');
 			done();
@@ -130,11 +112,9 @@ describe('workflow_engine.js', function() {
   });
   describe('exec.wf', function() {
 	it('should able to execute command prompt', function(done) {
-		var configFile = '../examples/milestone_5/issue_23/exec.wf';
+		var configFile = './examples/milestone_5/issue_23/exec.wf';
 		var testDir = 'examples/milestone_5/issue_23/target';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExec'], {}, function() {
 			console.log('done');
 			var fs = require('fs');
@@ -152,10 +132,8 @@ describe('workflow_engine.js', function() {
 		  res.statusCode = 200
 		  res.end('<xml>Sample Slide Show ' + req.headers.somekey + '</xml>');
 		})
-		var configFile = '../examples/milestone_5/issue_22/runExcelCase.wf';
-		delete require.cache[require.resolve(configFile)]; // delete require cache
-		config = require(configFile); // require again
-		workflowModule.setConfig(config);
+		var configFile = './examples/milestone_5/issue_22/runExcelCase.wf';
+		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {assert:assert}, function() {
 			console.log('done');
 			mitm.disable()
@@ -705,5 +683,13 @@ describe('workflow_engine.js', function() {
 	
 	
   });
-  
+  describe('__dirname variable', function() {
+	it('should able to show __dirname variable', function(done) {
+		var configFile = './examples/milestone_6/issue_92/testDirname.wf';
+		var config = workflowModule.importConfig(configFile);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+  });
 });
