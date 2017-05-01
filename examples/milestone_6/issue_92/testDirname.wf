@@ -5,8 +5,8 @@ module.exports = {
 		TestCase : {
 			showInMenu:true,
 			steps : [
-				{type:'setVar',name:'var1',value:__dirname + '/result.xlsx'},
-				{type:'setVar',name:'var2',value:'##__dirname##/result.xlsx'},
+				{type:'setVar',name:'var1',value:__dirname},
+				{type:'setVar',name:'var2',value:'##__dirname##'},
 				{type:'assert',expected:'##var1##',actual:'##var2##'},
 				{type:'log',log:'var1 ##var1## var2 ##var2##'},
 				{type:'log',log:'TestCase done'},
