@@ -20,6 +20,14 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	ctx.config = config;
 	ctx.opts = opts;
 	
+	if(typeof GLOBAL_LASTCONFIGFILE !== 'undefined') {
+		ctx.vars['__dirname'] = path.dirname(GLOBAL_LASTCONFIGFILE);
+	}
+	else {
+		ctx.vars['__dirname'] = __dirname;
+	}
+	
+	
 	if(typeof opts.inputVars !== 'undefined') {
 		for(var i in opts.inputVars) {
 			if(!Object.prototype.hasOwnProperty.call(opts.inputVars,i)) continue;
@@ -110,14 +118,21 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	
 	process.nextTick(next);
 }
-
+function setConfig(cfg) {
+	config = cfg;
+}
 module.exports.executeWorkFlow = executeWorkFlow;
 module.exports.setWindow = function(win) {
 	mainWin = win;
 }
-module.exports.setConfig = function(cfg) {
-	config = cfg;
-}
+module.exports.setConfig = setConfig;
 module.exports.setStepModule = function(mod) {
 	stepModule = mod;
+}
+module.exports.importConfig = function(configFile) {
+	delete require.cache[require.resolve(configFile)]; // delete require cache
+	config = require(configFile); // require again
+	setConfig(config);
+	global.GLOBAL_LASTCONFIGFILE = path.resolve(configFile);
+	return config;
 }
