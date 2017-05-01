@@ -6,7 +6,7 @@ var mainWin = null;
 var config = null;
 var stepModule = null;
 
-
+var GLOBAL_LASTCONFIGFILE = null;
 var executeWorkFlow = function(wf, opts, donefn) {
 	wf = util.clone(wf);
 	if(typeof opts === 'undefined') var opts = {};
@@ -133,6 +133,6 @@ module.exports.importConfig = function(configFile) {
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
 	setConfig(config);
-	global.GLOBAL_LASTCONFIGFILE = path.resolve(configFile);
+	GLOBAL_LASTCONFIGFILE = path.resolve(configFile);
 	return config;
 }
