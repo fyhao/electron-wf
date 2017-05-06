@@ -1,0 +1,107 @@
+
+module.exports = {
+	
+	"db" : {
+		
+	}
+	
+	,
+	workFlows : {
+		TestExcelCase : {
+			showInMenu:true,
+			steps : [
+				{type:'deleteFile',file:__dirname + '/result.xlsx'},
+				{type:'setVar',name:'filepath',value:__dirname + "/testcase.xlsx"},
+				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRow',savefile:__dirname + '/result.xlsx'},
+				{type:'runExcelCase',file:'##filepath##',sheet:'Sheet1',startRow:2,wf:'processRowDummy',outputVars:['name']},
+				{type:'deleteFile',file:__dirname + '/result.xlsx'},
+				{type:'log',log:'TestExcelCase done'},
+			]
+		},
+		processRow : {
+			steps : [
+				{type:'wsread',var:'no',col:'A'},
+				{type:'wsread',var:'name',col:'B'},
+				{type:'wsread',var:'type',col:'C'},
+				{type:'wsread',var:'expected',col:'D'},
+				{type:'wsread',var:'arg1',col:'F'},
+				{type:'wsread',var:'arg2',col:'G'},
+				{type:'wsread',var:'arg3',col:'H'},
+				
+				{type:'if',if:'equal',var:'type',pattern:'replaceAll',yes_subflow:'handleReplaceAll'},
+				{type:'if',if:'equal',var:'type',pattern:'ifTest',yes_subflow:'handleIf'},
+				{type:'if',if:'equal',var:'type',pattern:'incrementTest',yes_subflow:'handleIncrement'},
+				{type:'if',if:'equal',var:'type',pattern:'httpbin',yes_subflow:'handleHttpbin'},
+				{type:'if',if:'equal',var:'type',pattern:'ssh',yes_subflow:'handleSsh'},
+				{type:'if',if:'equal',var:'type',pattern:'replaceAll',remarks:'Just for dummy testing without yes_subflow no_subflow'},
+				
+				{type:'evaljs',var:'result',code:'vars["expected"] == vars["actual"] ? "passed" : "failed"'},
+				{type:'log',log:'##name##: expected ##expected## actual ##actual## result ##result##'},
+				{type:'wsupdate',col:'E',value:'##result##'},
+				
+			]
+		},
+		processRowDummy : {
+			steps : [
+				{type:'log',log:'Dummy row'},
+			]
+		},
+		handleReplaceAll : {
+			steps : [
+				{type:'replaceAll',var:'actual',source:'##arg1##',from:'##arg2##',to:'##arg3##'},
+			]
+		},
+		handleIf : {
+			steps : [
+				{type:'if',if:'##arg2##',var:'arg1',pattern:'##arg3##',yes_subflow:'handleIfYes',no_subflow:'handleIfNo'}
+			]
+		},
+		handleIfYes : {
+			steps : [
+				{type:'setVar',name:'actual',value:'yes'},
+			]
+		},
+		handleIfNo : {
+			steps : [
+				{type:'setVar',name:'actual',value:'no'},
+			]
+		},
+		handleIncrement : {
+			steps : [
+				{type:'incrementVar',name:'arg1'},
+				{type:'setVar',name:'actual',value:'##arg1##'},
+			]
+		},
+		handleHttpbin : {
+			steps : [
+				{type:'if',if:'equal',var:'arg1',pattern:'headers',yes_subflow:'handleHttpbinHeaders'},
+				{type:'if',if:'equal',var:'arg1',pattern:'xml',yes_subflow:'handleHttpbinXml'}
+			]
+		},
+		handleHttpbinHeaders : {
+			steps : [
+				{type:'http',url:'https://httpbin.org/headers',headers:{'someKey':'test1234'},var:'body'},
+				{type:'evaljs',var:'actual',code:'vars["body"].indexOf("test1234") > -1 ? "yes" : "no"'},
+			]
+		}
+		,
+		handleHttpbinXml : {
+			steps : [
+				{type:'http',url:'https://httpbin.org/xml',var:'body'},
+				{type:'setVar',name:'filepath',value:__dirname + '/result.xml'},
+				{type:'openFileWrite',name:'file'},
+				{type:'appendFileWrite',name:'file',content:'##body##'},
+				{type:'closeFileWrite',name:'file',file:'##filepath##'},
+				{type:'xml',file:'##filepath##',var:'xmlObj'},
+				{type:'evaljs',var:'actual',code:'JSON.stringify(vars["xmlObj"]).indexOf("Sample Slide Show") > -1 ? "yes": "no"'},
+			]
+		}
+		,
+		handleSsh : {
+			steps : [
+				{type:'ssh',host:'tty.sdf.org',user:'fyhao1',pass:'UkpcLrkR0B1QZg',cmds:['echo "test"'],exitWhenMatchedStdout:'continue'},
+				{type:'setVar',name:'actual',value:'yes'},
+			]
+		}
+	}
+}
