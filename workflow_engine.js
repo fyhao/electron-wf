@@ -132,6 +132,15 @@ module.exports.setStepModule = function(mod) {
 module.exports.importConfig = function(configFile) {
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
+	var config;
+	if(configFile.endsWith('.yml')) {
+		var str = fs.readFileSync(configFile,'utf8');
+		config = yaml.parse(str);
+	}
+	else {
+		delete require.cache[require.resolve(configFile)]; // delete require cache
+		config = require(configFile); // require again
+	}
 	setConfig(config);
 	// load plugins
 	loadPlugins(config);
