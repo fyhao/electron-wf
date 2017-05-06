@@ -133,6 +133,15 @@ module.exports.importConfig = function(configFile) {
 	delete require.cache[require.resolve(configFile)]; // delete require cache
 	config = require(configFile); // require again
 	setConfig(config);
+	// load plugins
+	loadPlugins(config);
+	/*
+	if(!checkWorkflowStepSpec(config)) {
+		util.alert("Error check step spec");
+		return;
+	}
+	*/
+	//console.log(configFile + "?" + config)
 	GLOBAL_LASTCONFIGFILE = path.resolve(configFile);
 	return config;
 }
