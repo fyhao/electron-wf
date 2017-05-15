@@ -2,6 +2,10 @@ language: node_js
 branches:
   only:
   - master
+
+os:
+  - linux
+  - osx
   
 node_js:
   - stable
