@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [2017] [tns-webform-client]
+Copyright (c) [2017] [electron-wf]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
