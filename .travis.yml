@@ -2,6 +2,7 @@ language: node_js
 branches:
   only:
   - master
+  - dev
 
 os:
   - linux
@@ -11,7 +12,7 @@ node_js:
   - stable
 after_success:
   - npm run coverage
-  - npm run release
+  - if test "$TRAVIS_BRANCH" = 'master'; then npm run release; fi
  
 env:
   global:

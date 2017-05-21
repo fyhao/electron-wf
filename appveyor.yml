@@ -8,6 +8,7 @@ platform:
 branches:
   only:
     - master
+    - dev
 
 skip_tags: true
 
@@ -26,7 +27,11 @@ test_script:
   - node --version
   - .\node_modules\.bin\npm --version
   - npm test
-  - npm run release
+  - ps: |
+      if($env:APPVEYOR_REPO_BRANCH -eq "master")
+      {
+        npm run release
+      }
   
   
 artifacts:
