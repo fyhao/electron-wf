@@ -692,4 +692,65 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('if expr', function() {
+	it('should able to perform if using expr attribute (yes)', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'apple',value:'1'}
+					]
+				},
+				yes_flow:{
+					steps : [
+						{type:'log',log:'yes'},
+						{type:'setVar',name:'result',value:'yes'}
+					]
+				},
+				no_flow:{
+					steps : [
+						{type:'log',log:'no'},
+						{type:'setVar',name:'result',value:'no'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to perform if using expr attribute (no)', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'apple',value:'1'}
+					]
+				},
+				yes_flow:{
+					steps : [
+						{type:'log',log:'yes'},
+						{type:'setVar',name:'result',value:'yes'}
+					]
+				},
+				no_flow:{
+					steps : [
+						{type:'log',log:'no'},
+						{type:'setVar',name:'result',value:'no'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
 });

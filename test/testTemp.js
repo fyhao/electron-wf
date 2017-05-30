@@ -13,14 +13,5 @@ var stepModule = ProjRequire('./step.js');
 describe('workflow_engine.js', function() {
   this.timeout(15000);
   
-  describe('__dirnvar config = workflowModule.importConfig(configFile);ame variable', function() {
-	it('should able to show __dirname variable', function(done) {
-		console.log(__dirname)
-		var configFile = './examples/milestone_6/issue_92/testDirname.wf';
-		var config = workflowModule.importConfig(configFile);
-		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			done();
-		});	
-    });
-  });
+  
 });
