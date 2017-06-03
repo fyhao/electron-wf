@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var cp = require('child_process');
 var util = require('./lib/util.js');

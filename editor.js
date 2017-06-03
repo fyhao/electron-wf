@@ -1,7 +1,7 @@
 const {app, BrowserWindow, Menu, dialog, ipcMain} = require('electron')
 const path = require('path')
 const url = require('url')
-var fs = require('fs');
+var fs = require('fs-extra');
 var util = require('./lib/util.js');
 
 var win;

@@ -30,10 +30,17 @@ describe('workflow_engine.js', function() {
   
   describe('copyFolder.wf', function() {
 	it('should able to copy folder', function(done) {
-		var configFile = './examples/milestone_2/issue_4/copyFolder.wf';
+		var path = './examples/milestone_2/issue_4/';
+		var configFile = path + 'copyFolder.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['PerformWork'], {}, function() {
-			console.log('done');
+			var fs = require('fs');
+			assert.equal(true, fs.existsSync(path + 'b'));
+			assert.equal(true, fs.existsSync(path + 'b/test.txt'));
+			assert.equal(true, fs.existsSync(path + 'b/d'));
+			assert.equal(true, fs.existsSync(path + 'b/e/test1.txt'));
+			assert.equal(true, fs.existsSync(path + 'b/1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/files.txt'));
+			assert.equal(true, fs.existsSync(path + 'b/dog/goes into a/bar/ask for join table.txt'));
 			done();
 		});	
     });

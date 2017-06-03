@@ -1,16 +1,6 @@
 
 module.exports = {
 	
-	"db" : {
-		"testdb" : {
-			user:'test',
-			password:'test',
-			server : 'localhost\\sqlserver2012',
-			database : 'cbp'
-		}
-	}
-	
-	,
 	workFlows : {
 		PerformWork : {
 			showInMenu:true,
@@ -20,11 +10,7 @@ module.exports = {
 				{type:'log',log:'To copy folder from ##source## to ##target##'},
 				{type:'deleteFolder',folder:'##target##'},
 				{type:'copyFolder', source:'##source##',target:'##target##'},
-				{type:'deleteFolder',folder:'c'},
-				{type:'createFolder',folder:'c'},
-				{type:'deleteFolder',folder:'c'},
-				{type:'deleteFile',file:'c.txt'},
-				{type:'copyFolder', source:'zz',target:'xx'},
+				
 			]
 		}
 	}

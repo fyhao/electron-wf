@@ -1,7 +1,7 @@
 const {app, BrowserWindow, Menu, dialog} = require('electron')
 const path = require('path')
 const url = require('url');
-const fs = require('fs');
+const fs = require('fs-extra');
 const os = require('os');
 var util = require('./lib/util.js');
 var tests = require('./tests.js');
