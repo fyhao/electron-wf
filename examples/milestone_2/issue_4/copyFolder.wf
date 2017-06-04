@@ -10,7 +10,7 @@ module.exports = {
 				{type:'log',log:'To copy folder from ##source## to ##target##'},
 				{type:'deleteFolder',folder:'##target##'},
 				{type:'copyFolder', source:'##source##',target:'##target##'},
-				
+				{type:'copyFolder', source:'notExist',target:'##target##'},
 			]
 		}
 	}

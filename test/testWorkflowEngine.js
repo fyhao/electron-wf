@@ -1,8 +1,5 @@
 var path = require('path');
 var assert = require('assert');
-global.ProjRequire = function(module) {
-	return require(path.join(__dirname, '/../' + module)); 
-}
 var workflowModule = ProjRequire('./workflow_engine.js');
 // initializing
 workflowModule.setWindow({webContents:{send:function(a,b) {}}});
@@ -707,7 +704,8 @@ describe('workflow_engine.js', function() {
 			workFlows : {
 				TestCase:{
 					steps : [
-						{type:'setVar',name:'apple',value:'1'}
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',yes_subflow:'yes_flow',no_subflow:'no_flow'}
 					]
 				},
 				yes_flow:{
@@ -736,7 +734,38 @@ describe('workflow_engine.js', function() {
 			workFlows : {
 				TestCase:{
 					steps : [
-						{type:'setVar',name:'apple',value:'1'}
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',yes_subflow:'yes_flow',no_subflow:'no_flow'}
+					]
+				},
+				yes_flow:{
+					steps : [
+						{type:'log',log:'yes'},
+						{type:'setVar',name:'result',value:'yes'}
+					]
+				},
+				no_flow:{
+					steps : [
+						{type:'log',log:'no'},
+						{type:'setVar',name:'result',value:'no'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to pass silently when yes_subflow not defined while perform if using expr attribute (yes)', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',no_subflow:'no_flow'}
 					]
 				},
 				yes_flow:{
