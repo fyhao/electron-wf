@@ -39,11 +39,13 @@ module.exports = {
 				{type:'log',log:'##name##: expected ##expected## actual ##actual## result ##result##'},
 				{type:'wsupdate',col:'E',value:'##result##'},
 				
+				{type:'wsupdate',col:'H',value:'dummy',if:'equals',var:'apple',pattern:'test'}
+				
 			]
 		},
 		processRowDummy : {
 			steps : [
-				{type:'log',log:'Dummy row'},
+				{type:'setVar',name:'dummy',value:'dummy'},
 			]
 		},
 		handleReplaceAll : {
@@ -94,6 +96,7 @@ module.exports = {
 				{type:'closeFileWrite',name:'file',file:'##filepath##'},
 				{type:'xml',file:'##filepath##',var:'xmlObj'},
 				{type:'evaljs',var:'actual',code:'JSON.stringify(vars["xmlObj"]).indexOf("Sample Slide Show") > -1 ? "yes": "no"'},
+				
 			]
 		}
 		,

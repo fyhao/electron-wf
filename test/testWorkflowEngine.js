@@ -1,8 +1,5 @@
 var path = require('path');
 var assert = require('assert');
-global.ProjRequire = function(module) {
-	return require(path.join(__dirname, '/../' + module)); 
-}
 var workflowModule = ProjRequire('./workflow_engine.js');
 // initializing
 workflowModule.setWindow({webContents:{send:function(a,b) {}}});
@@ -298,6 +295,8 @@ describe('workflow_engine.js', function() {
 						{type:'log',log:'Looping an array'},
 						{type:'setVar',name:'someArray',value:['1','2','3']},
 						{type:'runLoop',array:'someArray',wf:'eachItem',item:'theItem'},
+						{type:'assert',expected:3,actual:'##theItem##'},
+						{type:'assert',expected:5,actual:'##theInner##'},
 						{type:'log',log:'afterLoop'}
 					]
 				}
@@ -308,6 +307,7 @@ describe('workflow_engine.js', function() {
 						{type:'setVar',name:'innerArray',value:['4','5']},
 						{type:'runLoop',array:'innerArray',wf:'innerItem',item:'theInner'},
 						{type:'log',log:'for each item ##theItem## end ** ##innerItemApple##'},
+						{type:'assert',expected:5,actual:'##theInner##'},
 					]
 				}
 				,
@@ -402,6 +402,41 @@ describe('workflow_engine.js', function() {
 						{type:'log',log:'for each item ##item##'},
 						{type:'setVar',name:'someResult',value:'2'},
 						{type:'assert',expected:2,actual:'##someResult##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    }); // end of it
+	
+	it('should able to runLoop with start end step', function(done) {
+		
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'orange',value:0},
+						{type:'runLoop',start:0,end:5,step:1,wf:'eachItem'},
+						{type:'assert',expected:5,actual:'##orange##'},
+						{type:'setVar',name:'orange',value:0},
+						{type:'runLoop',start:0,end:5,step:2,wf:'eachItem'},
+						{type:'assert',expected:3,actual:'##orange##'},
+						{type:'setVar',name:'orange',value:0},
+						{type:'runLoop',start:0,end:5,step:6,wf:'eachItem'},
+						{type:'assert',expected:1,actual:'##orange##'},
+						{type:'setVar',name:'orange',value:0},
+						{type:'runLoop',end:5,wf:'eachItem'},
+						{type:'assert',expected:5,actual:'##orange##'},
+					]
+				}
+				,
+				eachItem:{
+					steps : [
+						{type:'incrementVar',name:'orange'},
 					]
 				}
 			}
@@ -707,7 +742,8 @@ describe('workflow_engine.js', function() {
 			workFlows : {
 				TestCase:{
 					steps : [
-						{type:'setVar',name:'apple',value:'1'}
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',yes_subflow:'yes_flow',no_subflow:'no_flow'}
 					]
 				},
 				yes_flow:{
@@ -736,7 +772,38 @@ describe('workflow_engine.js', function() {
 			workFlows : {
 				TestCase:{
 					steps : [
-						{type:'setVar',name:'apple',value:'1'}
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',yes_subflow:'yes_flow',no_subflow:'no_flow'}
+					]
+				},
+				yes_flow:{
+					steps : [
+						{type:'log',log:'yes'},
+						{type:'setVar',name:'result',value:'yes'}
+					]
+				},
+				no_flow:{
+					steps : [
+						{type:'log',log:'no'},
+						{type:'setVar',name:'result',value:'no'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	it('should able to pass silently when yes_subflow not defined while perform if using expr attribute (yes)', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'apple',value:'1'},
+						{type:'if', expr:'vars["apple"] == "1"',no_subflow:'no_flow'}
 					]
 				},
 				yes_flow:{
