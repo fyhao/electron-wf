@@ -73,7 +73,7 @@
     "es6-iterator": "2.0.0",
     "es6-symbol": "3.1.0",
     "escape-string-regexp": "1.0.5",
-    "exceljs": "0.3.1",
+    "exceljs": "^0.4.11",
     "execspawn": "1.0.1",
     "expand-template": "1.0.3",
     "extend": "3.0.0",
