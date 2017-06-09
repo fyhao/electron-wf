@@ -14,3 +14,5 @@ Badges
 - Check out [coveralls.io](https://coveralls.io/github/fyhao/electron-wf) for code coverage (triggered by travis if build success)
 - Check out [bithound.io](https://www.bithound.io/github/fyhao/electron-wf)
 - Check out [kiuwan](https://www.kiuwan.com/saas/web/dashboard/dashboard#%24pe%3Dcodereview%24mi%3Dsecurity%24sei%3D56571%24ac%3DA-7e1-15c656cd4c1)
+
+- updated temp
