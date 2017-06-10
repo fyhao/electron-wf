@@ -35,7 +35,7 @@ function openWorkflowFile(template,configFile) {
 		workflowMenus.forEach(function(i) {
 			temp.push(i);
 		});
-		menu = Menu.buildFromTemplate(temp)
+		var menu = Menu.buildFromTemplate(temp)
 		win.setMenu(menu);
 		currentOpenedConfigFile = configFile;
 	} catch (e) {
