@@ -27,6 +27,7 @@ test_script:
   - node --version
   - .\node_modules\.bin\npm --version
   - npm test
+  - npm run performance
   - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master")
       {

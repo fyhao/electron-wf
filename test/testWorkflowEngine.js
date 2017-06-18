@@ -827,4 +827,130 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  
+  describe('unique', function() {
+	it('should able to unique string array', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'["a","b","c","a","b","c","d","a","b","d","e","c"]'},
+						{type:'unique',array:'array',result:'result'},
+						{type:'Verify',result:'##result##'},
+					]
+				},
+				Verify:{
+					steps : [
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:5,actual:'##len##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("a") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("b") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("c") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("d") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("e") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+					]
+				}
+			}
+		};
+		
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	
+	it('should able to unique integer array', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[1,2,3,4,2,3,4,6,2,3,1,7]'},
+						{type:'unique',array:'array',result:'result'},
+						{type:'Verify',result:'##result##'},
+					]
+				},
+				Verify:{
+					steps : [
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:6,actual:'##len##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(1) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(2) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(3) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(4) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(6) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(7) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+					]
+				}
+			}
+		};
+		
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to unique mix array with string and integer', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[1,"a",2,"b",3,"c","a","b","c","d",3,6,1,2,3]'},
+						{type:'unique',array:'array',result:'result'},
+						{type:'Verify',result:'##result##'},
+					]
+				},
+				Verify:{
+					steps : [
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:8,actual:'##len##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(1) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(2) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(3) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf(6) > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("a") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("b") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("c") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+						{type:'evaljs',var:'a',code:'vars["result"].indexOf("d") > -1'},
+						{type:'assert',expected:true,actual:'##a##'},
+					]
+				}
+			}
+		};
+		
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+  });
+  
+  
+  
 });

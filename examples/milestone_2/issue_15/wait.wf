@@ -13,7 +13,7 @@ module.exports = {
 				{type:'setVar',name:'secToWait',value:0.1},
 				{type:'evaljs',var:'timeToWait',code:"vars['secToWait'] * 1000"},
 				{type:'log',log:'Going to wait ##secToWait## seconds before we continue'},
-				{type:'wait',time:'##timeToWait##'},
+				{type:'wait',timeout:'##timeToWait##'},
 				{type:'log',log:'done'}
 			]
 		}
