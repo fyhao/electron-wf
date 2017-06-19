@@ -673,6 +673,31 @@ describe('workflow_engine.js', function() {
 			done();
 		});	
 	});
+	it('should able to bypass runLoop if array or end is not defined', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:5, actual:'##len##'},
+						{type:'runLoop',item:'item',wf:'eachItem'}
+					]
+				}
+				,eachItem:{
+					steps : [
+						{type:'evaljs',var:'verified',code:'vars["item"].indexOf("first") > -1'},
+						{type:'assert',expected:'1', actual:'##verified##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+	});
   });
   
   
