@@ -157,8 +157,8 @@ describe('workflow_engine.js', function() {
 					{type:'log',log:'to alert'},
 					{type:'alert',message:'test'},
 					{type:'log',log:'to confirm'},
+					{type:'confirm',message:'test',buttons:['A','B'],answerIndex:'answerIndex',answer:'answer'},
 					{type:'confirm',message:'test',buttons:['A','B']},
-					
 					]
 				}
 			}
