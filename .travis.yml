@@ -5,7 +5,6 @@ branches:
   - dev
 
 os:
-  - linux
   - osx
   
 node_js:
