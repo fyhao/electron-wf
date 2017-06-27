@@ -19,7 +19,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_2/issue_14/http.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestHttp'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -48,7 +48,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_2/issue_15/wait.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestWait'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -109,7 +109,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_21/excel.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcel'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -120,7 +120,7 @@ describe('workflow_engine.js', function() {
 		var testDir = 'examples/milestone_5/issue_23/target';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExec'], {}, function() {
-			console.log('done');
+			
 			var fs = require('fs');
 			assert.equal(true, fs.existsSync(testDir));
 			done();
@@ -139,7 +139,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_22/runExcelCase.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			mitm.disable()
 			done();
 		});	
@@ -165,7 +165,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -189,7 +189,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -210,7 +210,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -230,7 +230,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -250,7 +250,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -281,7 +281,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -321,7 +321,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -350,7 +350,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -378,7 +378,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -408,7 +408,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -443,7 +443,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -465,7 +465,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -484,7 +484,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -507,7 +507,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -528,7 +528,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -546,7 +546,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -587,7 +587,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -616,7 +616,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -644,7 +644,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -669,7 +669,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
 	});
@@ -694,7 +694,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
 	});
@@ -721,7 +721,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -743,7 +743,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -787,7 +787,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -817,7 +817,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -847,7 +847,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -887,7 +887,7 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -927,7 +927,7 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -970,7 +970,7 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -993,7 +993,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -1013,7 +1013,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -1033,7 +1033,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     })
