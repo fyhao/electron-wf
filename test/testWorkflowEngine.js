@@ -976,6 +976,68 @@ describe('workflow_engine.js', function() {
     });
   });
   
+  describe('diff', function() {
+    
+	it('should able to diff array of integer', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:[1,2,3,4]},
+						{type:'setVar',name:'arrayB',value:[2,3,4,5]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:[1],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to diff array of string', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:["abc","bcd","t","cde"]},
+						{type:'setVar',name:'arrayB',value:["cde","bcd","tes"]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:["abc","t"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    });
+	
+	it('should able to diff array of mixed of integer and string', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:["abc","bcd",1,3,5,"t","cde"]},
+						{type:'setVar',name:'arrayB',value:["cde","bcd",1,3,"tes"]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:["abc",5,"t"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			console.log('done');
+			done();
+		});	
+    })
+  });
   
   
 });
