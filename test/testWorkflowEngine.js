@@ -19,7 +19,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_2/issue_14/http.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestHttp'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -48,7 +48,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_2/issue_15/wait.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestWait'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -109,7 +109,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_21/excel.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcel'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -120,7 +120,7 @@ describe('workflow_engine.js', function() {
 		var testDir = 'examples/milestone_5/issue_23/target';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExec'], {}, function() {
-			console.log('done');
+			
 			var fs = require('fs');
 			assert.equal(true, fs.existsSync(testDir));
 			done();
@@ -139,7 +139,7 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_22/runExcelCase.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			mitm.disable()
 			done();
 		});	
@@ -157,15 +157,15 @@ describe('workflow_engine.js', function() {
 					{type:'log',log:'to alert'},
 					{type:'alert',message:'test'},
 					{type:'log',log:'to confirm'},
+					{type:'confirm',message:'test',buttons:['A','B'],answerIndex:'answerIndex',answer:'answer'},
 					{type:'confirm',message:'test',buttons:['A','B']},
-					
 					]
 				}
 			}
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -189,7 +189,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -210,7 +210,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -230,7 +230,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -250,7 +250,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -281,7 +281,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -321,7 +321,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -350,7 +350,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -378,7 +378,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -408,7 +408,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -443,7 +443,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     }); // end of it
@@ -465,7 +465,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -484,7 +484,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -507,7 +507,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -528,7 +528,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -546,7 +546,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -587,7 +587,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -616,7 +616,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -644,7 +644,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -669,7 +669,32 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
+			done();
+		});	
+	});
+	it('should able to bypass runLoop if array or end is not defined', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:5, actual:'##len##'},
+						{type:'runLoop',item:'item',wf:'eachItem'}
+					]
+				}
+				,eachItem:{
+					steps : [
+						{type:'evaljs',var:'verified',code:'vars["item"].indexOf("first") > -1'},
+						{type:'assert',expected:'1', actual:'##verified##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			
 			done();
 		});	
 	});
@@ -696,7 +721,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -718,7 +743,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -762,7 +787,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -792,7 +817,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -822,7 +847,7 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -862,7 +887,7 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -902,7 +927,7 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
@@ -945,12 +970,74 @@ describe('workflow_engine.js', function() {
 		
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			console.log('done');
+			
 			done();
 		});	
     });
   });
   
+  describe('diff', function() {
+    
+	it('should able to diff array of integer', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:[1,2,3,4]},
+						{type:'setVar',name:'arrayB',value:[2,3,4,5]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:[1],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			
+			done();
+		});	
+    });
+	
+	it('should able to diff array of string', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:["abc","bcd","t","cde"]},
+						{type:'setVar',name:'arrayB',value:["cde","bcd","tes"]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:["abc","t"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			
+			done();
+		});	
+    });
+	
+	it('should able to diff array of mixed of integer and string', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'arrayA',value:["abc","bcd",1,3,5,"t","cde"]},
+						{type:'setVar',name:'arrayB',value:["cde","bcd",1,3,"tes"]},
+						{type:'diff',arrayA:'arrayA',arrayB:'arrayB',result:'result'},
+						{type:'assert',expected:["abc",5,"t"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			
+			done();
+		});	
+    })
+  });
   
   
 });
