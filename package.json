@@ -170,7 +170,7 @@
     "qs": "6.3.2",
     "rc": "1.1.6",
     "readable-stream": "1.0.34",
-    "request": "2.79.0",
+    "request": "2.81.0",
     "rimraf": "2.5.4",
     "robotjs": "0.4.7",
     "sax": "0.6.1",
@@ -201,7 +201,7 @@
     "through2": "0.6.5",
     "tough-cookie": "2.3.2",
     "traverse": "0.3.9",
-    "tunnel-agent": "0.4.3",
+    "tunnel-agent": "0.6.0",
     "tweetnacl": "0.14.5",
     "unirest": "0.5.1",
     "unzip-response": "1.0.2",
@@ -227,7 +227,7 @@
     "dist-x": "build -ml",
     "release": "build --publish onTagOrDraft",
     "postinstall": "install-app-deps",
-	"performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js"
+    "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js"
   },
   "repository": {
     "type": "git",
