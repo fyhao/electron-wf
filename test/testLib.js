@@ -26,20 +26,20 @@ describe('lib', function() {
 		}
 	it('should able to return a yml string from a json object', function(done) {	
 		str = yaml.stringify(sampleJson);
-		assert(true, str != null && str.length > 0);
-		assert(true, str.indexOf('{') == -1 && str.indexOf('}') == -1);
+		assert(str != null && str.length > 0, true);
+		assert(str.indexOf('{') == -1 && str.indexOf('}') == -1, true);
 		//console.log(str);
 		done();
     });
 	it('should able to return a json object from yml string', function(done) {	
 		var json = yaml.parse(str);
-		assert(true, json != null);
-		assert(true, compare(sampleJson, json, function(item) { return item['version']}));
-		assert(true, compare(sampleJson, json, function(item) { return item['flows'].length}));
-		assert(true, compare(sampleJson, json, function(item) { return item['flows'][1]['name']}));
-		assert(true, compare(sampleJson, json, function(item) { return item['flows'][1]['age']}));
-		assert(true, compare(sampleJson, json, function(item) { return item['flows'][1]['is']}));
-		assert(true, compare(sampleJson, json, function(item) { return item['flows'][1]['money']}));
+		assert.equal(json != null, true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['version']}), true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['flows'].length}), true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['flows'][1]['name']}), true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['flows'][1]['age']}), true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['flows'][1]['is']}), true);
+		assert.equal(compare(sampleJson, json, function(item) { return item['flows'][1]['money']}), true);
 		done();
     });
 	
@@ -53,25 +53,23 @@ describe('lib', function() {
 	var con = null;
 	it('should able to return a yml string from a standard workflow object', function(done) {
 		var config = workflowModule.importConfig(configFile);
-		assert(true, config != null);
+		assert.equal(config != null, true);
 		var str = yaml.stringify(config);
-		assert(true, str != null && str.length > 0);
-		assert(true, str.indexOf('{') == -1 && str.indexOf('}') == -1);
-		
+		assert.equal(str != null && str.length > 0, true);
+		assert.equal(str.indexOf('{') == -1 && str.indexOf('}') == -1, true);
 		con = str;
 		done();
     });
 	it('should able to return a yml string from a YML workflow object', function(done) {
 		//console.log('write con ' + con);
 		fs.writeFileSync(ymlFile, con);
-		assert(true, fs.existsSync(ymlFile));
+		assert.equal(fs.existsSync(ymlFile), true);
 		var ymlConfig = workflowModule.importConfig(ymlFile);
-		assert(true, typeof ymlConfig != 'undefined');
-		assert(true, typeof ymlConfig.workFlows != 'undefined');
-		assert(true, ymlConfig.workFlows.length > 0);
+		assert.equal(typeof ymlConfig != 'undefined', true);
+		assert.equal(typeof ymlConfig.workFlows != 'undefined', true);
 		var ymlStr = yaml.stringify(ymlConfig);
-		assert(true, ymlStr != null && ymlStr.length > 0);
-		assert(true, ymlStr.indexOf('{') == -1 && ymlStr.indexOf('}') == -1);
+		assert.equal(ymlStr != null && ymlStr.length > 0, true);
+		assert.equal(ymlStr.indexOf('{') == -1 && ymlStr.indexOf('}') == -1, true);
 		done();
     });
   });
