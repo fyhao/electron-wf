@@ -32,12 +32,12 @@ describe('workflow_engine.js', function() {
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['PerformWork'], {}, function() {
 			var fs = require('fs');
-			assert.equal(true, fs.existsSync(path + 'b'));
-			assert.equal(true, fs.existsSync(path + 'b/test.txt'));
-			assert.equal(true, fs.existsSync(path + 'b/d'));
-			assert.equal(true, fs.existsSync(path + 'b/e/test1.txt'));
-			assert.equal(true, fs.existsSync(path + 'b/1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/files.txt'));
-			assert.equal(true, fs.existsSync(path + 'b/dog/goes into a/bar/ask for join table.txt'));
+			assert.equal(fs.existsSync(path + 'b'), true);
+			assert.equal(fs.existsSync(path + 'b/test.txt'), true);
+			assert.equal(fs.existsSync(path + 'b/d'), true);
+			assert.equal(fs.existsSync(path + 'b/e/test1.txt'), true);
+			assert.equal(fs.existsSync(path + 'b/1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/files.txt'), true);
+			assert.equal(fs.existsSync(path + 'b/dog/goes into a/bar/ask for join table.txt'), true);
 			done();
 		});	
     });
@@ -48,7 +48,6 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_2/issue_15/wait.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestWait'], {}, function() {
-			
 			done();
 		});	
     });
@@ -64,7 +63,7 @@ describe('workflow_engine.js', function() {
 		workflowModule.executeWorkFlow(config.workFlows['TestFileWrite'], {}, function() {
 			var fs = require('fs');
 			var con = fs.readFileSync(testFile).toString();
-			assert.equal('1st line\r\n2nd linebbbccc\r\n', con);
+			assert.equal(con,'1st line\r\n2nd linebbbccc\r\n');
 			done();
 		});
     });
@@ -74,7 +73,7 @@ describe('workflow_engine.js', function() {
 		workflowModule.executeWorkFlow(config.workFlows['TestFileAppend'], {}, function() {
 			var fs = require('fs');
 			var con = fs.readFileSync(testFile).toString();
-			assert.equal('init\r\n1st line\r\n2nd linebbbccc\r\n', con);
+			assert.equal(con,'init\r\n1st line\r\n2nd linebbbccc\r\n');
 			done();
 		});
     });
@@ -97,7 +96,7 @@ describe('workflow_engine.js', function() {
 		var config = workflowModule.importConfig(wfFile);
 		workflowModule.executeWorkFlow(config.workFlows['DeleteFile'], {}, function() {
 			var fs = require('fs');
-			assert.equal(true, !fs.existsSync(testFile));
+			assert.equal(!fs.existsSync(testFile), true);
 			done();
 		});
     });
@@ -109,7 +108,6 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_21/excel.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcel'], {}, function() {
-			
 			done();
 		});	
     });
@@ -120,9 +118,8 @@ describe('workflow_engine.js', function() {
 		var testDir = 'examples/milestone_5/issue_23/target';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExec'], {}, function() {
-			
 			var fs = require('fs');
-			assert.equal(true, fs.existsSync(testDir));
+			assert.equal(fs.existsSync(testDir), true);
 			done();
 		});	
     });
@@ -139,7 +136,6 @@ describe('workflow_engine.js', function() {
 		var configFile = './examples/milestone_5/issue_22/runExcelCase.wf';
 		var config = workflowModule.importConfig(configFile);
 		workflowModule.executeWorkFlow(config.workFlows['TestExcelCase'], {assert:assert}, function() {
-			
 			mitm.disable()
 			done();
 		});	
@@ -152,7 +148,6 @@ describe('workflow_engine.js', function() {
 		var config = {
 			workFlows : {
 				TestCase:{
-					
 					steps : [
 					{type:'log',log:'to alert'},
 					{type:'alert',message:'test'},
@@ -165,7 +160,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			
 			done();
 		});	
     });
@@ -189,7 +183,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -210,7 +203,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			
 			done();
 		});	
     });
@@ -230,7 +222,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			
 			done();
 		});	
     });
@@ -250,7 +241,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			
 			done();
 		});	
     });
@@ -281,7 +271,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -321,7 +310,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -350,7 +338,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -371,14 +358,12 @@ describe('workflow_engine.js', function() {
 				eachItem:{
 					steps : [
 						{type:'log',log:'for each item ##item##'},
-						
 					]
 				}
 			}
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -408,7 +393,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -443,7 +427,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     }); // end of it
@@ -465,7 +448,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function() {
-			
 			done();
 		});	
     });
@@ -484,7 +466,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -507,7 +488,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -528,7 +508,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -546,7 +525,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -587,7 +565,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -616,7 +593,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
@@ -644,7 +620,6 @@ describe('workflow_engine.js', function() {
 		};
 		workflowModule.setConfig(config);
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
-			
 			done();
 		});	
     });
