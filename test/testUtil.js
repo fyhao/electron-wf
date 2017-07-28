@@ -59,4 +59,15 @@ describe('util.js', function() {
 		assert.equal(b.eight.b[0].e, 3);
     });
   });
+  
+  describe('replaceAll', function() {
+	it('replaceAll for string', function() {
+		var result = util.replaceAll("source", "e", "t");
+		assert.equal(result, "sourct");
+    });
+	it('replaceAll for number', function() {
+		var result = util.replaceAll(11234, "2", "3");
+		assert.equal(result, "11334");
+    });
+  });
 });
