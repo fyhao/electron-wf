@@ -1,6 +1,6 @@
 {
   "name": "electron-wf",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "main.js",
   "devDependencies": {
     "coveralls": "^2.13.0",
