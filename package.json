@@ -79,7 +79,7 @@
     "extend": "3.0.0",
     "extended": "0.0.6",
     "extender": "0.0.10",
-    "fast-csv": "0.5.7",
+    "fast-csv": "2.4.0",
     "forever-agent": "0.6.1",
     "form-data": "2.1.2",
     "fs-extra": "^3.0.1",
