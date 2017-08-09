@@ -599,7 +599,7 @@ describe('workflow_engine.js', function() {
   });
   
   describe('listFiles', function() {
-	it('should able to list files', function(done) {
+	it('should able to list files (with using if filter)', function(done) {
 		var config = {
 			
 			workFlows : {
@@ -614,6 +614,27 @@ describe('workflow_engine.js', function() {
 						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result'},
 						{type:'evaljs',var:'len',code:'vars["result"].length'},
 						{type:'assert',expected:5, actual:'##len##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	it('should able to list files (with using expr filter)', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result',expr:'item.indexOf("b") > -1'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:2, actual:'##len##'},
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result',expr:'item.endsWith("1.txt")'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'assert',expected:2, actual:'##len##'},
 					]
 				}
 			}
