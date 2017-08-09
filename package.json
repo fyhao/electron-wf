@@ -84,7 +84,7 @@
     "form-data": "2.1.2",
     "fs-extra": "^3.0.1",
     "fs.realpath": "1.0.0",
-    "fstream": "0.1.31",
+    "fstream": "1.0.11",
     "gauge": "1.2.7",
     "generate-function": "2.0.0",
     "generate-object-property": "1.2.0",
