@@ -12,12 +12,13 @@ var GLOBAL_LASTCONFIGFILE = null;
 var checkWorkflowStepSpec = function(config) {
 	try {
 		if(typeof config.workFlows !== 'undefined') {
+			var eachCheckSpec = function(step) {
+				stepModule.checkSpec(step);
+			};
 			for(var key in config.workFlows) {
 				var wf = config.workFlows[key];
 				if(wf.steps && wf.steps.length) {
-					wf.steps.forEach(function(step) {
-						stepModule.checkSpec(step);
-					});
+					wf.steps.forEach(eachCheckSpec);
 				}
 			}
 		}
