@@ -164,7 +164,7 @@
     "promise": "7.1.1",
     "pullstream": "1.0.0",
     "pump": "1.0.2",
-    "punycode": "1.4.1",
+    "punycode": "2.1.0",
     "qs": "6.3.2",
     "rc": "1.1.6",
     "readable-stream": "2.3.3",
