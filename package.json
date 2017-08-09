@@ -159,7 +159,7 @@
     "path-is-absolute": "1.0.1",
     "pinkie": "2.0.4",
     "pinkie-promise": "2.0.1",
-    "prebuild": "4.5.0",
+    "prebuild": "6.2.1",
     "process-nextick-args": "1.0.7",
     "promise": "7.1.1",
     "pullstream": "1.0.0",
