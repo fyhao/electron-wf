@@ -64,7 +64,6 @@
     "delegates": "1.0.0",
     "duplexer2": "0.1.4",
     "ecc-jsbn": "0.1.1",
-    "es6-symbol": "3.1.0",
     "escape-string-regexp": "1.0.5",
     "exceljs": "^0.4.11",
     "execspawn": "1.0.1",
