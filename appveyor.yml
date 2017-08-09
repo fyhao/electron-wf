@@ -8,7 +8,7 @@ platform:
 branches:
   only:
     - master
-    - dev
+    - /dev-.*/
 
 skip_tags: true
 
