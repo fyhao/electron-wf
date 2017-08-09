@@ -56,7 +56,7 @@
     "concat-map": "0.0.1",
     "core-js": "1.2.7",
     "core-util-is": "1.0.2",
-    "crc32-stream": "0.3.4",
+    "crc32-stream": "2.0.0",
     "cryptiles": "3.1.2",
     "d": "0.1.1",
     "dashdash": "1.14.1",
@@ -201,7 +201,7 @@
     "tunnel-agent": "0.6.0",
     "tweetnacl": "0.14.5",
     "unirest": "0.5.1",
-    "unzip-response": "1.0.2",
+    "unzip-response": "1.0.2",crc32-stream
     "unzip2": "0.2.5",
     "url-template": "2.0.8",
     "util-deprecate": "1.0.2",
