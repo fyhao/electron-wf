@@ -132,7 +132,7 @@
     "mime-db": "1.25.0",
     "mime-types": "2.1.13",
     "minimatch": "3.0.3",
-    "minimist": "0.0.8",
+    "minimist": "1.2.0",
     "mkdirp": "0.5.1",
     "moment": "2.15.2",
     "ms": "2.0.0",
