@@ -194,7 +194,7 @@
     "supports-color": "4.2.1",
     "tar": "2.2.1",
     "tar-fs": "1.15.0",
-    "tar-stream": "1.2.2",
+    "tar-stream": "1.5.4",
     "tedious": "1.14.0",
     "through2": "2.0.3",
     "tough-cookie": "2.3.2",
