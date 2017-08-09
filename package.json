@@ -90,7 +90,6 @@
     "hoek": "4.2.0",
     "http-signature": "1.1.1",
     "hyperquest": "2.1.2",
-    "iconv-lite": "0.4.15",
     "inflight": "1.0.6",
     "inherits": "2.0.3",
     "ini": "1.3.4",
