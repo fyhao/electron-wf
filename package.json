@@ -168,7 +168,7 @@
     "punycode": "1.4.1",
     "qs": "6.3.2",
     "rc": "1.1.6",
-    "readable-stream": "1.0.34",
+    "readable-stream": "2.3.3",
     "request": "2.81.0",
     "rimraf": "2.5.4",
     "robotjs": "0.4.7",
