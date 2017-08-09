@@ -105,7 +105,7 @@
     "is-property": "1.0.2",
     "is-typedarray": "1.0.0",
     "isarray": "2.0.2",
-    "isexe": "1.1.2",
+    "isexe": "2.0.0",
     "isstream": "0.1.2",
     "jodid25519": "1.0.2",
     "jsbn": "1.1.0",
