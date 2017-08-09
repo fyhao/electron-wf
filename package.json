@@ -39,7 +39,6 @@
     "binary": "0.3.0",
     "bl": "1.2.0",
     "block-stream": "0.0.9",
-    "bluebird": "3.4.7",
     "boom": "5.2.0",
     "brace-expansion": "1.1.7",
     "buffer-crc32": "0.2.13",
