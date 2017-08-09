@@ -94,7 +94,7 @@
     "ghrepos": "2.0.0",
     "ghutils": "3.2.1",
     "github-from-package": "0.0.0",
-    "glob": "5.0.15",
+    "glob": "7.1.2",
     "graceful-fs": "4.1.11",
     "graceful-readlink": "1.0.1",
     "har-validator": "2.0.6",
