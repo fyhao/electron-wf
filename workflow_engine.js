@@ -98,8 +98,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	}
 	var replaceVars = function(c) {
 		if(util.isOnlyOneVariable(c)) {
-			var varName = util.getStringBetween(c, '##','##')
-			c = ctx.vars[varName]
+			var varName = util.getStringBetween(c, '##','##');
+			c = ctx.vars[varName];
 		}
 		else {
 			for(var k in ctx.vars) {
