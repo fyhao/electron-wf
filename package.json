@@ -213,7 +213,7 @@
     "xmlbuilder": "4.2.1",
     "xtend": "4.0.1",
     "yamljs": "^0.2.10",
-    "zip-stream": "0.5.2"
+    "zip-stream": "1.2.0"
   },
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
