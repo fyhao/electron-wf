@@ -201,7 +201,7 @@
     "tunnel-agent": "0.6.0",
     "tweetnacl": "0.14.5",
     "unirest": "0.5.1",
-    "unzip-response": "1.0.2",
+    "unzip-response": "3.0.0",
     "unzip2": "0.2.5",
     "url-template": "2.0.8",
     "util-deprecate": "1.0.2",
