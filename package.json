@@ -183,7 +183,7 @@
     "sqlstring": "2.2.0",
     "ssh2": "0.5.4",
     "ssh2-streams": "0.1.16",
-    "sshpk": "1.10.1",
+    "sshpk": "1.13.1",
     "streamsearch": "0.1.2",
     "string-extended": "0.0.8",
     "string_decoder": "1.0.3",
