@@ -129,7 +129,7 @@
     "lodash.padstart": "4.6.1",
     "match-stream": "0.0.2",
     "mime": "1.3.4",
-    "mime-db": "1.25.0",
+    "mime-db": "1.29.0",
     "mime-types": "2.1.13",
     "minimatch": "3.0.3",
     "minimist": "1.2.0",
