@@ -147,7 +147,7 @@
     "noop-logger": "0.1.1",
     "nopt": "3.0.6",
     "normalize-package-data": "^2.3.8",
-    "npmlog": "2.0.4",
+    "npmlog": "4.1.2",
     "oauth-sign": "0.8.2",
     "object-extended": "0.0.7",
     "once": "1.4.0",
