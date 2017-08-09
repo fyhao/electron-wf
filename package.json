@@ -37,7 +37,7 @@
     "babel-runtime": "6.25.0",
     "balanced-match": "0.4.2",
     "bcrypt-pbkdf": "1.0.0",
-    "big-number": "0.3.1",
+    "big-number": "0.4.0",
     "bignumber.js": "3.1.2",
     "binary": "0.3.0",
     "bl": "1.2.0",
