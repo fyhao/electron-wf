@@ -64,7 +64,6 @@
     "delegates": "1.0.0",
     "duplexer2": "0.1.4",
     "ecc-jsbn": "0.1.1",
-    "end-of-stream": "1.1.0",
     "es5-ext": "0.10.12",
     "es6-iterator": "2.0.0",
     "es6-symbol": "3.1.0",
