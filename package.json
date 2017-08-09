@@ -88,7 +88,7 @@
     "gauge": "2.7.4",
     "generate-function": "2.0.0",
     "generate-object-property": "1.2.0",
-    "generic-pool": "2.5.0",
+    "generic-pool": "3.1.7",
     "getpass": "0.1.6",
     "ghreleases": "1.0.5",
     "ghrepos": "2.0.0",
