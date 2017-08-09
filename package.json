@@ -97,7 +97,7 @@
     "glob": "7.1.2",
     "graceful-fs": "4.1.11",
     "graceful-readlink": "1.0.1",
-    "har-validator": "2.0.6",
+    "har-validator": "5.0.3",
     "has-ansi": "2.0.0",
     "has-unicode": "2.0.1",
     "hawk": "6.0.2",
