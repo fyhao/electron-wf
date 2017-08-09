@@ -632,7 +632,7 @@ describe('workflow_engine.js', function() {
 						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result',expr:'item.indexOf("b") > -1'},
 						{type:'evaljs',var:'len',code:'vars["result"].length'},
 						{type:'assert',expected:2, actual:'##len##'},
-						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result',expr:'item.endsWith("1.txt")'},
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first',var:'result',expr:'return item.endsWith("1.txt")'},
 						{type:'evaljs',var:'len',code:'vars["result"].length'},
 						{type:'assert',expected:2, actual:'##len##'},
 					]
