@@ -174,7 +174,7 @@
     "tar-stream": "1.5.4",
     "tedious": "2.0.1",
     "through2": "2.0.3",
-    "tough-cookie": "2.3.2",
+    "tough-cookie": "2.3.3",
     "tunnel-agent": "0.6.0",
     "tweetnacl": "1.0.0",
     "unirest": "0.5.1",
