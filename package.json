@@ -87,7 +87,7 @@
     "has-ansi": "2.0.0",
     "has-unicode": "2.0.1",
     "hawk": "6.0.2",
-    "hoek": "4.2.1",
+    "hoek": "5.0.3",
     "http-signature": "1.1.1",
     "hyperquest": "2.1.2",
     "inflight": "1.0.6",
