@@ -644,6 +644,29 @@ describe('workflow_engine.js', function() {
 			done();
 		});	
     });
+	it('should able to list files and sorted by date time', function(done) {
+		var config = {
+			
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first/second/third',var:'result',sortByDateTime:'desc'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'evaljs',var:'filename',code:'vars["result"][0]'},
+						{type:'assert',expected:'examples\\milestone_6\\issue_27\\first\\second\\third\\c2.txt', actual:'##filename##'},
+						{type:'listFiles',folder:'examples/milestone_6/issue_27/first/second/third',var:'result',sortByDateTime:'asc'},
+						{type:'evaljs',var:'len',code:'vars["result"].length'},
+						{type:'evaljs',var:'filename',code:'vars["result"][0]'},
+						{type:'assert',expected:'examples\\milestone_6\\issue_27\\first\\second\\third\\c1.txt', actual:'##filename##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
 	it('should able to iterate the files in runLoop', function(done) {
 		var config = {
 			workFlows : {
