@@ -165,7 +165,7 @@
     "streamsearch": "0.1.2",
     "string-extended": "0.0.8",
     "string_decoder": "1.0.3",
-    "stringstream": "0.0.5",
+    "stringstream": "0.0.6",
     "strip-ansi": "3.0.1",
     "strip-json-comments": "2.0.1",
     "supports-color": "4.2.1",
