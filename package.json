@@ -56,7 +56,7 @@
     "date-extended": "0.0.6",
     "debug": "2.6.9",
     "declare.js": "0.0.8",
-    "deep-extend": "0.4.1",
+    "deep-extend": "0.5.1",
     "delayed-stream": "1.0.0",
     "delegates": "1.0.0",
     "duplexer2": "0.1.4",
