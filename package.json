@@ -188,7 +188,8 @@
     "xmlbuilder": "9.0.1",
     "xtend": "4.0.1",
     "yamljs": "^0.2.10",
-    "zip-stream": "1.2.0"
+    "zip-stream": "1.2.0",
+    "snyk": "^1.83.0"
   },
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
@@ -198,7 +199,9 @@
     "dist-x": "build -ml",
     "release": "build --publish onTagOrDraft",
     "postinstall": "install-app-deps",
-    "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js"
+    "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -240,5 +243,6 @@
         "deb"
       ]
     }
-  }
+  },
+  "snyk": true
 }
