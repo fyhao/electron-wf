@@ -56,7 +56,7 @@
     "date-extended": "0.0.6",
     "debug": "2.6.9",
     "declare.js": "0.0.8",
-    "deep-extend": "0.4.1",
+    "deep-extend": "0.5.1",
     "delayed-stream": "1.0.0",
     "delegates": "1.0.0",
     "duplexer2": "0.1.4",
@@ -161,11 +161,11 @@
     "sqlstring": "2.2.0",
     "ssh2": "0.5.4",
     "ssh2-streams": "0.1.16",
-    "sshpk": "1.13.1",
+    "sshpk": "1.14.1",
     "streamsearch": "0.1.2",
     "string-extended": "0.0.8",
     "string_decoder": "1.0.3",
-    "stringstream": "0.0.5",
+    "stringstream": "0.0.6",
     "strip-ansi": "3.0.1",
     "strip-json-comments": "2.0.1",
     "supports-color": "4.2.1",
@@ -188,7 +188,8 @@
     "xmlbuilder": "9.0.1",
     "xtend": "4.0.1",
     "yamljs": "^0.2.10",
-    "zip-stream": "1.2.0"
+    "zip-stream": "1.2.0",
+    "snyk": "^1.83.0"
   },
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
@@ -198,7 +199,9 @@
     "dist-x": "build -ml",
     "release": "build --publish onTagOrDraft",
     "postinstall": "install-app-deps",
-    "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js"
+    "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -240,5 +243,6 @@
         "deb"
       ]
     }
-  }
+  },
+  "snyk": true
 }
