@@ -1,6 +1,5 @@
 // IMPORT
 var fs = require('fs-extra');
-var util = require('./lib/util.js');
 var path = require('path');
 
 module.exports = {

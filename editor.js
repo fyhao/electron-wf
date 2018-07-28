@@ -1,11 +1,9 @@
-const {app, BrowserWindow, Menu, dialog, ipcMain} = require('electron')
+const {BrowserWindow, Menu, dialog, ipcMain} = require('electron')
 const path = require('path')
 const url = require('url')
 var fs = require('fs-extra');
-var util = require('./lib/util.js');
 
 var win;
-var menuTemplate = [];
 module.exports.createEditWindow = function createEditWindow (input) {
   if(win != null) {
 	  dialog.showMessageBox({message:'There is already an editor window opened', buttons:['OK']});
