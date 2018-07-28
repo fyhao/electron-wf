@@ -68,7 +68,7 @@ const template = [
 						if(typeof fileNames === 'undefined') return;
 						var configFile;
 						configFile = fileNames[0];
-						var win = editor.createEditWindow({configFile:configFile});
+						editor.createEditWindow({configFile:configFile});
 					});
 					
 				}
