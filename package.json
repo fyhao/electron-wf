@@ -62,7 +62,7 @@
     "duplexer2": "0.1.4",
     "ecc-jsbn": "0.1.1",
     "escape-string-regexp": "1.0.5",
-    "exceljs": "^0.4.11",
+    "exceljs": "^1.6.0",
     "execspawn": "1.0.1",
     "expand-template": "1.0.3",
     "extended": "0.0.6",
