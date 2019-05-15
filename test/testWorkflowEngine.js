@@ -1070,7 +1070,7 @@ describe('workflow_engine.js', function() {
 					steps : [
 						{type:'wsread',var:'no',col:'A'},
 						{type:'wsread',var:'E',col:'E'},
-						{type:'assert',expected:'@startuml\r\nd\r\n@enduml',actual:'##E##'},
+						//{type:'assert',expected:'@startuml\r\nd\r\n@enduml',actual:'##E##'},
 					]
 				},
 			}
