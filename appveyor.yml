@@ -19,7 +19,6 @@ cache:
   - node_modules -> package.json
 
 install:
-  - echo "test1"
   - ps: Install-Product node $env:nodejs_version
   - npm install npm@latest
   - .\node_modules\.bin\npm install
