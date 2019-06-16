@@ -71,7 +71,7 @@
     "forever-agent": "0.6.1",
     "fs-extra": "^3.0.1",
     "fs.realpath": "1.0.0",
-    "fstream": "1.0.11",
+    "fstream": "1.0.12",
     "gauge": "2.7.4",
     "generate-function": "2.0.0",
     "generate-object-property": "1.2.0",
