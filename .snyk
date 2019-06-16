@@ -20,3 +20,6 @@ patch:
         patched: '2018-06-24T05:40:10.587Z'
     - unirest > request > hawk > cryptiles > boom > hoek:
         patched: '2018-06-24T05:40:10.587Z'
+  'npm:tunnel-agent:20170305':
+    - unirest > request > tunnel-agent:
+        patched: '2018-10-24T01:05:29.327Z'
