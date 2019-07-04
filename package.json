@@ -189,7 +189,7 @@
     "xtend": "4.0.1",
     "yamljs": "^0.2.10",
     "zip-stream": "1.2.0",
-    "snyk": "^1.104.2"
+    "snyk": "^1.189.0"
   },
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/alltests.js",
@@ -201,7 +201,8 @@
     "postinstall": "install-app-deps",
     "performance": "node --allow-natives-syntax ./node_modules/mocha/bin/_mocha --reporter mocha-performance ./test/alltests.js",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
