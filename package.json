@@ -115,7 +115,7 @@
     "mime": "1.4.1",
     "mime-db": "1.29.0",
     "mime-types": "2.1.16",
-    "minimist": "1.2.0",
+    "minimist": "1.2.5",
     "mkdirp": "0.5.1",
     "ms": "2.0.0",
     "mssql": "4.0.4",
