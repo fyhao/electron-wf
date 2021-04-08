@@ -1057,6 +1057,28 @@ describe('workflow_engine.js', function() {
 		});	
     })
   });
-  
-  
+  describe('runExcelCase', function() {
+	  it('should able to parse planttext uml code in excel file', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'runExcelCase',file:'examples/issue_180/example.xlsx',sheet:'Scenario',startRow:2,wf:'processRow'},
+					]
+				},
+				processRow : {
+					steps : [
+						{type:'wsread',var:'no',col:'A'},
+						{type:'wsread',var:'E',col:'E'},
+						//{type:'assert',expected:'@startuml\r\nd\r\n@enduml',actual:'##E##'},
+					]
+				},
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+  });
 });
