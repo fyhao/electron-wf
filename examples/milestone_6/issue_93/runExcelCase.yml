@@ -4,18 +4,18 @@ workFlows:
     steps:
       -
         type: deleteFile
-        file: /workspace/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        file: 'D:\Projects\WF\resources\app\examples\milestone_6\issue_93/result.xlsx'
       -
         type: setVar
         name: filepath
-        value: /workspace/electron-wf/examples/milestone_6/issue_93/testcase.xlsx
+        value: 'D:\Projects\WF\resources\app\examples\milestone_6\issue_93/testcase.xlsx'
       -
         type: runExcelCase
         file: '##filepath##'
         sheet: Sheet1
         startRow: 2
         wf: processRow
-        savefile: /workspace/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        savefile: 'D:\Projects\WF\resources\app\examples\milestone_6\issue_93/result.xlsx'
       -
         type: runExcelCase
         file: '##filepath##'
@@ -26,7 +26,7 @@ workFlows:
           - name
       -
         type: deleteFile
-        file: /workspace/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        file: 'D:\Projects\WF\resources\app\examples\milestone_6\issue_93/result.xlsx'
       -
         type: log
         log: 'TestExcelCase done'
@@ -185,7 +185,7 @@ workFlows:
       -
         type: setVar
         name: filepath
-        value: /workspace/electron-wf/examples/milestone_6/issue_93/result.xml
+        value: 'D:\Projects\WF\resources\app\examples\milestone_6\issue_93/result.xml'
       -
         type: openFileWrite
         name: file
