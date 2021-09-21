@@ -159,7 +159,7 @@
     "sntp": "2.0.2",
     "sprintf": "0.1.5",
     "sqlstring": "2.2.0",
-    "ssh2": "0.5.4",
+    "ssh2": "1.0.0",
     "ssh2-streams": "0.1.16",
     "sshpk": "1.14.1",
     "streamsearch": "0.1.2",
