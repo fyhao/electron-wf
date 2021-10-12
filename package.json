@@ -4,7 +4,7 @@
   "main": "main.js",
   "devDependencies": {
     "coveralls": "^2.13.0",
-    "electron": "^9.1.0",
+    "electron": "^11.5.0",
     "electron-builder": "^19.10.0",
     "electron-prebuilt": "^1.4.13",
     "electron-reload": "^1.1.0",
