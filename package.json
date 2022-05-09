@@ -102,7 +102,7 @@
     "isstream": "0.1.2",
     "jodid25519": "1.0.2",
     "jsbn": "1.1.0",
-    "json-schema": "0.2.3",
+    "json-schema": "0.4.0",
     "json-stringify-safe": "5.0.1",
     "jsonist": "2.1.0",
     "jsonpointer": "4.1.0",
