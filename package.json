@@ -188,7 +188,7 @@
     "xmlbuilder": "9.0.1",
     "xtend": "4.0.1",
     "yamljs": "^0.2.10",
-    "zip-stream": "1.2.0",
+    "zip-stream": "6.0.0",
     "snyk": "^1.685.0"
   },
   "scripts": {
