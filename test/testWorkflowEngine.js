@@ -1081,4 +1081,133 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('onException', function() {
+	it('should able to handle exception with onException handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'testValue',value:'initial'},
+						{type:'evaljs',var:'result',code:'throw new Error("Test exception")'},
+						{type:'setVar',name:'shouldNotReach',value:'reached'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'log',log:'Exception caught: ##__exception__##'},
+						{type:'setVar',name:'exceptionHandled',value:'yes'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function(result) {
+			assert.equal(result.outputVars.exceptionHandled, 'yes');
+			assert.equal(typeof result.outputVars.shouldNotReach, 'undefined');
+			done();
+		});	
+    });
+	
+	it('should able to access exception details in handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Specific error message")'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'log',log:'Exception: ##__exception__##'},
+						{type:'setVar',name:'exceptionMessage',value:'##__exception__##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function(result) {
+			assert.equal(result.outputVars.exceptionMessage, 'Specific error message');
+			done();
+		});	
+    });
+	
+	it('should able to continue after exception when no onException handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'beforeError',value:'set'},
+						{type:'evaljs',var:'result',code:'throw new Error("Test exception")'},
+						{type:'setVar',name:'afterError',value:'should not set'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function(result) {
+			// When no handler is defined, the error should be passed to donefn
+			assert.equal(typeof result.error !== 'undefined', true);
+			done();
+		});	
+    });
+	
+	it('should able to handle exception in sub-workflow', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'value1',value:'test'},
+						{type:'SubFlow'},
+					],
+					onException: 'HandleException'
+				},
+				SubFlow:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Sub-workflow exception")'},
+					]
+				},
+				HandleException:{
+					steps : [
+						{type:'log',log:'Handled sub-workflow exception'},
+						{type:'setVar',name:'handledSubException',value:'yes'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function(result) {
+			assert.equal(result.outputVars.handledSubException, 'yes');
+			done();
+		});	
+    });
+	
+	it('should preserve context variables in exception handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'myVar',value:'myValue'},
+						{type:'setVar',name:'anotherVar',value:'anotherValue'},
+						{type:'evaljs',var:'result',code:'throw new Error("Test")'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'log',log:'myVar: ##myVar##, anotherVar: ##anotherVar##'},
+						{type:'assert',expected:'myValue',actual:'##myVar##'},
+						{type:'assert',expected:'anotherValue',actual:'##anotherVar##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function(result) {
+			done();
+		});	
+    });
+  });
 });
