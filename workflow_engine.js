@@ -121,6 +121,31 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		return step;
 	}
 	var curStep = 0;
+	
+	// Helper function to prepare output variables
+	var prepareOutputVars = function() {
+		var outputVars = {};
+		if(typeof opts.outputVars !== 'undefined') {
+			opts.outputVars.forEach(function(i) {
+				outputVars[i] = ctx.vars[i];
+			});
+		}
+		if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
+			for(var i in ctx.vars) {
+				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+				outputVars[i] = ctx.vars[i];
+			}
+		}
+		// If no specific outputVars requested, return all vars (for testing)
+		if(typeof opts.outputVars === 'undefined' && (typeof opts.inputVars === 'undefined' || typeof opts.inputVars.outputall === 'undefined')) {
+			for(var i in ctx.vars) {
+				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+				outputVars[i] = ctx.vars[i];
+			}
+		}
+		return outputVars;
+	};
+	
 	var checkNext = function() {
 		// execute next
 		if(1 + curStep < wf.steps.length) {
@@ -128,18 +153,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			process.nextTick(next);
 		}
 		else {
-			var outputVars = {};
-			if(typeof opts.outputVars !== 'undefined') {
-				opts.outputVars.forEach(function(i) {
-					outputVars[i] = ctx.vars[i];
-				});
-			}
-			if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
-				for(var i in ctx.vars) {
-					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-					outputVars[i] = ctx.vars[i];
-				}
-			}
+			var outputVars = prepareOutputVars();
 			if(donefn)process.nextTick(function() {
 				donefn({outputVars:outputVars});
 			});
@@ -156,8 +170,8 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		
 		// Check if onException handler is defined
 		if(typeof wf.onException !== 'undefined' && typeof config.workFlows[wf.onException] !== 'undefined') {
-			// Execute the exception handling workflow
-			var inputVars = {__exception__: ctx.vars['__exception__'], __exceptionStack__: ctx.vars['__exceptionStack__'], outputall: true};
+			// Execute the exception handling workflow with all context variables
+			var inputVars = {outputall: true};
 			for(var i in ctx.vars) {
 				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
 				inputVars[i] = ctx.vars[i];
@@ -170,25 +184,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 					}
 				}
 				// After exception handler completes, prepare outputVars and call donefn
-				var outputVars = {};
-				if(typeof opts.outputVars !== 'undefined') {
-					opts.outputVars.forEach(function(i) {
-						outputVars[i] = ctx.vars[i];
-					});
-				}
-				if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
-					for(var i in ctx.vars) {
-						if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-						outputVars[i] = ctx.vars[i];
-					}
-				}
-				// If no specific outputVars requested, return all vars (for testing)
-				if(typeof opts.outputVars === 'undefined' && (typeof opts.inputVars === 'undefined' || typeof opts.inputVars.outputall === 'undefined')) {
-					for(var i in ctx.vars) {
-						if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-						outputVars[i] = ctx.vars[i];
-					}
-				}
+				var outputVars = prepareOutputVars();
 				if(donefn) process.nextTick(function() {
 					donefn({outputVars:outputVars, error: error});
 				});

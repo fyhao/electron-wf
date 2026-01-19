@@ -1,0 +1,74 @@
+// Example workflow demonstrating onException feature
+// This workflow shows how to handle exceptions that occur during workflow execution
+
+module.exports = {
+	workFlows : {
+		// Main workflow that may throw an exception
+		MainWorkflow : {
+			showInMenu: true,
+			steps : [
+				{type:'log',log:'Starting main workflow'},
+				{type:'setVar',name:'counter',value:0},
+				{type:'incrementVar',name:'counter'},
+				{type:'log',log:'Counter value: ##counter##'},
+				// This step will throw an exception
+				{type:'evaljs',var:'result',code:'throw new Error("Something went wrong!")'},
+				// These steps will not execute because exception occurred
+				{type:'log',log:'This will not be logged'},
+				{type:'setVar',name:'completed',value:'yes'},
+			],
+			// Define the exception handler workflow
+			onException: 'ErrorHandler'
+		},
+		
+		// Exception handler workflow
+		ErrorHandler : {
+			steps : [
+				{type:'log',log:'=== EXCEPTION CAUGHT ==='},
+				{type:'log',log:'Exception message: ##__exception__##'},
+				{type:'log',log:'Counter was: ##counter##'},
+				{type:'setVar',name:'errorHandled',value:'yes'},
+				{type:'setVar',name:'errorMessage',value:'##__exception__##'},
+				{type:'log',log:'Exception has been handled gracefully'},
+			]
+		},
+		
+		// Example with sub-workflow exception
+		WorkflowWithSubflow : {
+			showInMenu: true,
+			steps : [
+				{type:'log',log:'Starting workflow with subflow'},
+				{type:'setVar',name:'mainValue',value:'test'},
+				{type:'SubWorkflowWithError'},
+				{type:'log',log:'This will not be logged'},
+			],
+			onException: 'SubflowErrorHandler'
+		},
+		
+		SubWorkflowWithError : {
+			steps : [
+				{type:'log',log:'In sub-workflow'},
+				{type:'evaljs',var:'result',code:'throw new Error("Sub-workflow error")'},
+			]
+		},
+		
+		SubflowErrorHandler : {
+			steps : [
+				{type:'log',log:'Handled exception from sub-workflow'},
+				{type:'log',log:'Error: ##__exception__##'},
+				{type:'log',log:'Main value was: ##mainValue##'},
+			]
+		},
+		
+		// Example without exception handler (exception will propagate)
+		WorkflowWithoutHandler : {
+			showInMenu: true,
+			steps : [
+				{type:'log',log:'This workflow has no exception handler'},
+				{type:'evaljs',var:'result',code:'throw new Error("Unhandled error")'},
+				{type:'log',log:'This will not execute'},
+			]
+			// Note: no onException defined, so error will propagate
+		}
+	}
+};
