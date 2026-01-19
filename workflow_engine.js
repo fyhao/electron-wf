@@ -163,20 +163,54 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			ctx.vars = {};
 		}
 	}
+	
+	// Helper function to copy context variables to inputVars
+	var copyContextVarsToInputVars = function(inputVars) {
+		for(var i in ctx.vars) {
+			if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+			inputVars[i] = ctx.vars[i];
+		}
+	};
+	
+	var isHandlingException = false; // Flag to prevent recursive exception handling
+	
 	var handleException = function(error) {
+		// Prevent infinite recursion if exception handler itself throws
+		if(isHandlingException) {
+			console.error('Exception occurred in exception handler, re-throwing:', error);
+			if(donefn) process.nextTick(function() {
+				donefn({error: error});
+			});
+			else {
+				throw error;
+			}
+			return;
+		}
+		
 		// Store exception details in context variables
 		ctx.vars['__exception__'] = error.message || error.toString();
 		ctx.vars['__exceptionStack__'] = error.stack || '';
 		
 		// Check if onException handler is defined
 		if(typeof wf.onException !== 'undefined' && typeof config.workFlows[wf.onException] !== 'undefined') {
+			// Set flag to prevent recursive exception handling
+			isHandlingException = true;
+			
 			// Execute the exception handling workflow with all context variables
 			var inputVars = {outputall: true};
-			for(var i in ctx.vars) {
-				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-				inputVars[i] = ctx.vars[i];
-			}
+			copyContextVarsToInputVars(inputVars);
+			
 			executeWorkFlow(config.workFlows[wf.onException], {inputVars:inputVars,assert:ctx.opts.assert}, function(outputOpts) {
+				isHandlingException = false; // Reset flag after exception handler completes
+				
+				// If exception handler itself had an error, propagate it
+				if(outputOpts.error) {
+					if(donefn) process.nextTick(function() {
+						donefn({error: outputOpts.error});
+					});
+					return;
+				}
+				
 				if(outputOpts.outputVars) {
 					for(var i in outputOpts.outputVars) {
 						if(!Object.prototype.hasOwnProperty.call(outputOpts.outputVars,i)) continue;
@@ -209,10 +243,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			if(typeof config.workFlows[step.type] !== 'undefined') {
 				var inputVars = step;
 				if(typeof step.inputall !== 'undefined' && step.inputall) {
-					for(var i in ctx.vars) {
-						if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-						inputVars[i] = ctx.vars[i];
-					}
+					copyContextVarsToInputVars(inputVars);
 				}
 				executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
 					// Check if sub-workflow returned an error

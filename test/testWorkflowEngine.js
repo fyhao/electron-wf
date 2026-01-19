@@ -1209,5 +1209,31 @@ describe('workflow_engine.js', function() {
 			done();
 		});	
     });
+	
+	it('should prevent infinite recursion if exception handler throws', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("First error")'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'log',log:'In exception handler'},
+						{type:'evaljs',var:'result',code:'throw new Error("Handler error")'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {}, function(result) {
+			// Exception handler's error should be returned
+			assert.equal(typeof result.error !== 'undefined', true);
+			assert.equal(result.error.message, 'Handler error');
+			done();
+		});	
+    });
   });
 });
