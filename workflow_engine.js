@@ -121,6 +121,31 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		return step;
 	}
 	var curStep = 0;
+	
+	// Helper function to prepare output variables
+	var prepareOutputVars = function() {
+		var outputVars = {};
+		if(typeof opts.outputVars !== 'undefined') {
+			opts.outputVars.forEach(function(i) {
+				outputVars[i] = ctx.vars[i];
+			});
+		}
+		if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
+			for(var i in ctx.vars) {
+				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+				outputVars[i] = ctx.vars[i];
+			}
+		}
+		// If no specific outputVars requested, return all vars (for testing)
+		if(typeof opts.outputVars === 'undefined' && (typeof opts.inputVars === 'undefined' || typeof opts.inputVars.outputall === 'undefined')) {
+			for(var i in ctx.vars) {
+				if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+				outputVars[i] = ctx.vars[i];
+			}
+		}
+		return outputVars;
+	};
+	
 	var checkNext = function() {
 		// execute next
 		if(1 + curStep < wf.steps.length) {
@@ -128,18 +153,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			process.nextTick(next);
 		}
 		else {
-			var outputVars = {};
-			if(typeof opts.outputVars !== 'undefined') {
-				opts.outputVars.forEach(function(i) {
-					outputVars[i] = ctx.vars[i];
-				});
-			}
-			if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
-				for(var i in ctx.vars) {
-					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-					outputVars[i] = ctx.vars[i];
-				}
-			}
+			var outputVars = prepareOutputVars();
 			if(donefn)process.nextTick(function() {
 				donefn({outputVars:outputVars});
 			});
@@ -149,31 +163,122 @@ var executeWorkFlow = function(wf, opts, donefn) {
 			ctx.vars = {};
 		}
 	}
-	var next = function() {
-		var step = wf.steps[curStep];
-		step = replaceVarsStep(step);
-		
-		// search available work flow
-		if(typeof config.workFlows[step.type] !== 'undefined') {
-			var inputVars = step;
-			if(typeof step.inputall !== 'undefined' && step.inputall) {
-				for(var i in ctx.vars) {
-					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-					inputVars[i] = ctx.vars[i];
-				}
+	
+	// Helper function to copy context variables to inputVars
+	var copyContextVarsToInputVars = function(inputVars) {
+		for(var i in ctx.vars) {
+			if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
+			inputVars[i] = ctx.vars[i];
+		}
+	};
+	
+	var isHandlingException = false; // Flag to prevent recursive exception handling
+	
+	var handleException = function(error) {
+		// Prevent infinite recursion if exception handler itself throws
+		if(isHandlingException) {
+			console.error('Exception occurred in exception handler, re-throwing:', error);
+			if(donefn) process.nextTick(function() {
+				donefn({error: error});
+			});
+			else {
+				throw error;
 			}
-			executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
+			return;
+		}
+		
+		// Store exception details in context variables
+		ctx.vars['__exception__'] = error.message || error.toString();
+		ctx.vars['__exceptionStack__'] = error.stack || '';
+		
+		// Check if onException handler is defined
+		if(typeof wf.onException !== 'undefined' && typeof config.workFlows[wf.onException] !== 'undefined') {
+			// Set flag to prevent recursive exception handling
+			isHandlingException = true;
+			
+			// Execute the exception handling workflow with all context variables
+			var inputVars = {outputall: true};
+			copyContextVarsToInputVars(inputVars);
+			
+			executeWorkFlow(config.workFlows[wf.onException], {inputVars:inputVars,assert:ctx.opts.assert}, function(outputOpts) {
+				isHandlingException = false; // Reset flag after exception handler completes
+				
+				// If exception handler itself had an error, propagate it
+				if(outputOpts.error) {
+					if(donefn) process.nextTick(function() {
+						donefn({error: outputOpts.error});
+					});
+					return;
+				}
+				
 				if(outputOpts.outputVars) {
 					for(var i in outputOpts.outputVars) {
 						if(!Object.prototype.hasOwnProperty.call(outputOpts.outputVars,i)) continue;
 						ctx.vars[i] = outputOpts.outputVars[i];
 					}
 				}
-				process.nextTick(checkNext);
+				// After exception handler completes, prepare outputVars and call donefn
+				var outputVars = prepareOutputVars();
+				if(donefn) process.nextTick(function() {
+					donefn({outputVars:outputVars, error: error});
+				});
 			});
+		} else {
+			// No exception handler defined, re-throw the error
+			if(donefn) process.nextTick(function() {
+				donefn({error: error});
+			});
+			else {
+				throw error;
+			}
 		}
-		else {
-			stepModule.processStep(ctx, step, checkNext);
+	};
+	
+	var next = function() {
+		try {
+			var step = wf.steps[curStep];
+			step = replaceVarsStep(step);
+			
+			// search available work flow
+			if(typeof config.workFlows[step.type] !== 'undefined') {
+				var inputVars = step;
+				if(typeof step.inputall !== 'undefined' && step.inputall) {
+					copyContextVarsToInputVars(inputVars);
+				}
+				executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
+					// Check if sub-workflow returned an error
+					if(outputOpts.error) {
+						handleException(outputOpts.error);
+						return;
+					}
+					if(outputOpts.outputVars) {
+						for(var i in outputOpts.outputVars) {
+							if(!Object.prototype.hasOwnProperty.call(outputOpts.outputVars,i)) continue;
+							ctx.vars[i] = outputOpts.outputVars[i];
+						}
+					}
+					process.nextTick(checkNext);
+				});
+			}
+			else {
+				// Wrap stepModule.processStep to catch synchronous and asynchronous errors
+				var originalCheckNext = checkNext;
+				var wrappedCheckNext = function(err) {
+					if(err) {
+						handleException(err);
+					} else {
+						originalCheckNext();
+					}
+				};
+				
+				try {
+					stepModule.processStep(ctx, step, wrappedCheckNext);
+				} catch(syncError) {
+					handleException(syncError);
+				}
+			}
+		} catch(error) {
+			handleException(error);
 		}
 	} // end next
 	
