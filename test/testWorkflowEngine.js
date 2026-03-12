@@ -1081,4 +1081,197 @@ describe('workflow_engine.js', function() {
 		});	
     });
   });
+  
+  describe('sortArray', function() {
+	it('should able to sort integer array in ascending order', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result',order:'asc'},
+						{type:'assert',expected:[1,2,3,5,8,9],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort integer array in descending order', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result',order:'desc'},
+						{type:'assert',expected:[9,8,5,3,2,1],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort string array in ascending order', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'["dog","cat","apple","zebra","banana"]'},
+						{type:'sortArray',array:'array',result:'result',order:'asc'},
+						{type:'assert',expected:["apple","banana","cat","dog","zebra"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort string array in descending order', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'["dog","cat","apple","zebra","banana"]'},
+						{type:'sortArray',array:'array',result:'result',order:'desc'},
+						{type:'assert',expected:["zebra","dog","cat","banana","apple"],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should default to ascending order when order is not specified', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result'},
+						{type:'assert',expected:[1,2,3,5,8,9],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort with custom compare function', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers',inputA:'a',inputB:'b',outputResult:'compareResult'}
+					]
+				},
+				CompareNumbers:{
+					steps : [
+						{type:'evaljs',var:'compareResult',code:'vars["a"] - vars["b"]'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort with custom compare function using default parameter names', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers'}
+					]
+				},
+				CompareNumbers:{
+					steps : [
+						{type:'evaljs',var:'compareResult',code:'vars["a"] - vars["b"]'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should able to sort with custom compare function for descending order', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbersDesc',inputA:'first',inputB:'second',outputResult:'result'}
+					]
+				},
+				CompareNumbersDesc:{
+					steps : [
+						{type:'evaljs',var:'result',code:'vars["second"] - vars["first"]'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should handle empty array', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs', var:'array',code:'[]'},
+						{type:'sortArray',array:'array',result:'result',order:'asc'},
+						{type:'assert',expected:[],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+	
+	it('should handle undefined array', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'sortArray',array:'nonExistentArray',result:'result',order:'asc'},
+						{type:'assert',expected:[],actual:'##result##'}
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
+			done();
+		});	
+    });
+  });
 });
