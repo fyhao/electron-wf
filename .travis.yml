@@ -8,7 +8,7 @@ os:
   - osx
   
 node_js:
-  - stable
+  - "8"
 after_success:
   - npm run coverage
   - npm run performance
