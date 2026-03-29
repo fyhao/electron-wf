@@ -1070,7 +1070,8 @@ describe('workflow_engine.js', function() {
 					steps : [
 						{type:'wsread',var:'no',col:'A'},
 						{type:'wsread',var:'E',col:'E'},
-						//{type:'assert',expected:'@startuml\r\nd\r\n@enduml',actual:'##E##'},
+						{type:'evaljs',var:'normalizedE',code:'vars.E.replace(/\\r\\n/g,"\\n").replace(/\\r/g,"\\n")'},
+						{type:'assert',expected:'@startuml\nd\n@enduml',actual:'##normalizedE##'},
 					]
 				},
 			}
@@ -1079,6 +1080,134 @@ describe('workflow_engine.js', function() {
 		workflowModule.executeWorkFlow(config.workFlows['TestCase'], {assert:assert}, function() {
 			done();
 		});	
+    });
+  });
+
+  describe('onException', function() {
+	it('should run the configured exception handler and stop the remaining steps', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'beforeError',value:'set'},
+						{type:'evaljs',var:'result',code:'throw new Error("Test exception")'},
+						{type:'setVar',name:'afterError',value:'should not be set'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'setVar',name:'exceptionHandled',value:'yes'},
+						{type:'setVar',name:'exceptionMessage',value:'##__exception__##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {outputVars:['beforeError','afterError','exceptionHandled','exceptionMessage']}, function(result) {
+			assert.equal(typeof result.error, 'undefined');
+			assert.equal(result.outputVars.beforeError, 'set');
+			assert.equal(typeof result.outputVars.afterError, 'undefined');
+			assert.equal(result.outputVars.exceptionHandled, 'yes');
+			assert.equal(result.outputVars.exceptionMessage, 'Test exception');
+			done();
+		});
+    });
+
+	it('should expose exception stack details to the handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Stacked error")'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'evaljs',var:'hasStack',code:'typeof vars.__exceptionStack__ === "string" && vars.__exceptionStack__.length > 0'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {outputVars:['hasStack']}, function(result) {
+			assert.equal(typeof result.error, 'undefined');
+			assert.equal(result.outputVars.hasStack, true);
+			done();
+		});
+    });
+
+	it('should handle errors returned by a sub-workflow', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'setVar',name:'outerValue',value:'outer'},
+						{type:'SubFlow'},
+					],
+					onException: 'HandleException'
+				},
+				SubFlow:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Sub-workflow exception")'},
+					]
+				},
+				HandleException:{
+					steps : [
+						{type:'setVar',name:'handledSubFlow',value:'yes'},
+						{type:'setVar',name:'handledOuterValue',value:'##outerValue##'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {outputVars:['handledSubFlow','handledOuterValue']}, function(result) {
+			assert.equal(typeof result.error, 'undefined');
+			assert.equal(result.outputVars.handledSubFlow, 'yes');
+			assert.equal(result.outputVars.handledOuterValue, 'outer');
+			done();
+		});
+    });
+
+	it('should return the error when no exception handler is configured', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Unhandled exception")'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {}, function(result) {
+			assert.equal(result.error.message, 'Unhandled exception');
+			done();
+		});
+    });
+
+	it('should surface errors thrown by the exception handler', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Primary exception")'},
+					],
+					onException: 'HandleException'
+				},
+				HandleException:{
+					steps : [
+						{type:'evaljs',var:'result',code:'throw new Error("Handler exception")'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {}, function(result) {
+			assert.equal(result.error.message, 'Handler exception');
+			done();
+		});
     });
   });
   

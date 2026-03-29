@@ -72,6 +72,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	wf = util.clone(wf);
 	if(typeof opts === 'undefined') var opts = {};
 	var ctx = {};
+	var isFinished = false;
 	
 	ctx.openFileWritesHandler = {};
 	ctx.excelHandler = {};
@@ -120,63 +121,112 @@ var executeWorkFlow = function(wf, opts, donefn) {
 		}
 		return step;
 	}
+	var copyVars = function(source, target) {
+		for(var i in source) {
+			if(!Object.prototype.hasOwnProperty.call(source, i)) continue;
+			target[i] = source[i];
+		}
+	}
+	var collectOutputVars = function() {
+		var outputVars = {};
+		if(typeof opts.outputVars !== 'undefined') {
+			opts.outputVars.forEach(function(i) {
+				outputVars[i] = ctx.vars[i];
+			});
+		}
+		if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' && opts.inputVars.outputall) {
+			copyVars(ctx.vars, outputVars);
+		}
+		return outputVars;
+	}
+	var finish = function(result) {
+		if(isFinished) {
+			return;
+		}
+		isFinished = true;
+		if(donefn) process.nextTick(function() {
+			donefn(result);
+		});
+		// garbage collection
+		ctx.openFileWritesHandler = {};
+		ctx.excelHandler = {};
+		ctx.vars = {};
+	}
 	var curStep = 0;
-	var checkNext = function() {
+	var checkNext = function(error) {
+		if(error) {
+			handleException(error);
+			return;
+		}
 		// execute next
 		if(1 + curStep < wf.steps.length) {
 			curStep++;
 			process.nextTick(next);
 		}
 		else {
-			var outputVars = {};
-			if(typeof opts.outputVars !== 'undefined') {
-				opts.outputVars.forEach(function(i) {
-					outputVars[i] = ctx.vars[i];
-				});
-			}
-			if(typeof opts.inputVars !== 'undefined' && typeof opts.inputVars.outputall !== 'undefined' &&  opts.inputVars.outputall) {
-				for(var i in ctx.vars) {
-					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-					outputVars[i] = ctx.vars[i];
-				}
-			}
-			if(donefn)process.nextTick(function() {
-				donefn({outputVars:outputVars});
-			});
-			// garbage collection
-			ctx.openFileWritesHandler = {};
-			ctx.excelHandler = {};
-			ctx.vars = {};
+			finish({outputVars:collectOutputVars()});
 		}
 	}
-	var next = function() {
-		var step = wf.steps[curStep];
-		step = replaceVarsStep(step);
-		
-		// search available work flow
-		if(typeof config.workFlows[step.type] !== 'undefined') {
-			var inputVars = step;
-			if(typeof step.inputall !== 'undefined' && step.inputall) {
-				for(var i in ctx.vars) {
-					if(!Object.prototype.hasOwnProperty.call(ctx.vars,i)) continue;
-					inputVars[i] = ctx.vars[i];
-				}
-			}
-			executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
-				if(outputOpts.outputVars) {
-					for(var i in outputOpts.outputVars) {
-						if(!Object.prototype.hasOwnProperty.call(outputOpts.outputVars,i)) continue;
-						ctx.vars[i] = outputOpts.outputVars[i];
-					}
-				}
-				process.nextTick(checkNext);
-			});
+	var handleException = function(error) {
+		if(typeof wf.onException === 'undefined' || typeof config.workFlows[wf.onException] === 'undefined') {
+			finish({error:error});
+			return;
 		}
-		else {
-			stepModule.processStep(ctx, step, checkNext);
+		ctx.vars.__exception__ = error.message || error.toString();
+		ctx.vars.__exceptionStack__ = error.stack || '';
+		var inputVars = {outputall:true};
+		copyVars(ctx.vars, inputVars);
+		executeWorkFlow(config.workFlows[wf.onException], {inputVars:inputVars, assert:ctx.opts.assert}, function(outputOpts) {
+			if(outputOpts.error) {
+				finish({error:outputOpts.error});
+				return;
+			}
+			if(outputOpts.outputVars) {
+				copyVars(outputOpts.outputVars, ctx.vars);
+			}
+			finish({outputVars:collectOutputVars()});
+		});
+	}
+	var next = function() {
+		try {
+			var step = wf.steps[curStep];
+			step = replaceVarsStep(step);
+			
+			// search available work flow
+			if(typeof config.workFlows[step.type] !== 'undefined') {
+				var inputVars = step;
+				if(typeof step.inputall !== 'undefined' && step.inputall) {
+					copyVars(ctx.vars, inputVars);
+				}
+				executeWorkFlow(config.workFlows[step.type], {inputVars:inputVars,outputVars:step.outputVars,assert:ctx.opts.assert}, function(outputOpts) {
+					if(outputOpts.error) {
+						handleException(outputOpts.error);
+						return;
+					}
+					if(outputOpts.outputVars) {
+						copyVars(outputOpts.outputVars, ctx.vars);
+					}
+					process.nextTick(checkNext);
+				});
+			}
+			else {
+				stepModule.processStep(ctx, step, function(stepError) {
+					if(stepError) {
+						handleException(stepError);
+						return;
+					}
+					checkNext();
+				});
+			}
+		} catch (error) {
+			handleException(error);
 		}
 	} // end next
 	
+	if(!wf.steps || !wf.steps.length) {
+		finish({outputVars:collectOutputVars()});
+		return;
+	}
 	process.nextTick(next);
 }
 function setConfig(cfg) {

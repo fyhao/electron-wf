@@ -1,0 +1,21 @@
+module.exports = {
+	workFlows : {
+		MainWorkflow : {
+			showInMenu: true,
+			steps : [
+				{type:'log',log:'Starting workflow'},
+				{type:'setVar',name:'counter',value:1},
+				{type:'evaljs',var:'result',code:'throw new Error("Example workflow failure")'},
+				{type:'log',log:'This step is skipped'},
+			],
+			onException: 'HandleFailure'
+		},
+		HandleFailure : {
+			steps : [
+				{type:'log',log:'Caught: ##__exception__##'},
+				{type:'log',log:'Counter was ##counter##'},
+				{type:'setVar',name:'errorHandled',value:'yes'},
+			]
+		}
+	}
+};
