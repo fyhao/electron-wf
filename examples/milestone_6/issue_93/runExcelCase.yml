@@ -4,18 +4,18 @@ workFlows:
     steps:
       -
         type: deleteFile
-        file: /home/runner/work/electron-wf/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        file: /Users/fyhao/Projects/electron-wf/examples/milestone_6/issue_93/result.xlsx
       -
         type: setVar
         name: filepath
-        value: /home/runner/work/electron-wf/electron-wf/examples/milestone_6/issue_93/testcase.xlsx
+        value: /Users/fyhao/Projects/electron-wf/examples/milestone_6/issue_93/testcase.xlsx
       -
         type: runExcelCase
         file: '##filepath##'
         sheet: Sheet1
         startRow: 2
         wf: processRow
-        savefile: /home/runner/work/electron-wf/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        savefile: /Users/fyhao/Projects/electron-wf/examples/milestone_6/issue_93/result.xlsx
       -
         type: runExcelCase
         file: '##filepath##'
@@ -26,7 +26,7 @@ workFlows:
           - name
       -
         type: deleteFile
-        file: /home/runner/work/electron-wf/electron-wf/examples/milestone_6/issue_93/result.xlsx
+        file: /Users/fyhao/Projects/electron-wf/examples/milestone_6/issue_93/result.xlsx
       -
         type: log
         log: 'TestExcelCase done'
@@ -185,7 +185,7 @@ workFlows:
       -
         type: setVar
         name: filepath
-        value: /home/runner/work/electron-wf/electron-wf/examples/milestone_6/issue_93/result.xml
+        value: /Users/fyhao/Projects/electron-wf/examples/milestone_6/issue_93/result.xml
       -
         type: openFileWrite
         name: file
