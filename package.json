@@ -5,7 +5,7 @@
   "devDependencies": {
     "coveralls": "^3.1.1",
     "electron": "^18.3.7",
-    "electron-builder": "^19.56.2",
+    "electron-builder": "^26.8.1",
     "electron-prebuilt": "^1.4.13",
     "electron-reload": "^1.1.0",
     "istanbul": "^0.4.5",
