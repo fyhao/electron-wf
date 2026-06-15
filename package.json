@@ -170,7 +170,7 @@
     "strip-ansi": "7.0.0",
     "strip-json-comments": "2.0.1",
     "supports-color": "4.2.1",
-    "tar": "7.5.11",
+    "tar": "7.5.16",
     "tar-stream": "1.5.4",
     "tedious": "2.0.1",
     "through2": "2.0.3",
