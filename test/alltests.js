@@ -7,4 +7,5 @@ require('./testLib.js');
 require('./testStep.js');
 require('./testWorkflowEngine.js');
 require('./testSelectFile.js');
+require('./testCli.js');
 //require('./testTemp.js');
