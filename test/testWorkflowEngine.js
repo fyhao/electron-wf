@@ -1308,7 +1308,9 @@ describe('workflow_engine.js', function() {
 				TestCase:{
 					steps : [
 						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
-						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers',inputA:'a',inputB:'b',outputResult:'compareResult'}
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers',inputA:'a',inputB:'b',outputResult:'compareResult'},
+						{type:'assert',expected:[1,2,3,5,8,9],actual:'##result##'},
+						{type:'assert',expected:[5,2,8,1,9,3],actual:'##array##'}
 					]
 				},
 				CompareNumbers:{
@@ -1330,7 +1332,8 @@ describe('workflow_engine.js', function() {
 				TestCase:{
 					steps : [
 						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
-						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers'}
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbers'},
+						{type:'assert',expected:[1,2,3,5,8,9],actual:'##result##'}
 					]
 				},
 				CompareNumbers:{
@@ -1352,7 +1355,8 @@ describe('workflow_engine.js', function() {
 				TestCase:{
 					steps : [
 						{type:'evaljs', var:'array',code:'[5,2,8,1,9,3]'},
-						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbersDesc',inputA:'first',inputB:'second',outputResult:'result'}
+						{type:'sortArray',array:'array',result:'result',compareWf:'CompareNumbersDesc',inputA:'first',inputB:'second',outputResult:'result'},
+						{type:'assert',expected:[9,8,5,3,2,1],actual:'##result##'}
 					]
 				},
 				CompareNumbersDesc:{
