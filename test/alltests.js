@@ -8,4 +8,5 @@ require('./testStep.js');
 require('./testWorkflowEngine.js');
 require('./testSelectFile.js');
 require('./testCli.js');
+require('./testParallel.js');
 //require('./testTemp.js');
