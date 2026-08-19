@@ -1086,6 +1086,23 @@ describe('workflow_engine.js', function() {
   });
 
   describe('onException', function() {
+	it('should execute an in-memory workflow without importing a config file', function(done) {
+		var config = {
+			workFlows : {
+				TestCase:{
+					steps : [
+						{type:'evaljs',var:'hasWorkflowDirectory',code:'typeof vars.__dirname === "string" && vars.__dirname.length > 0'},
+					]
+				}
+			}
+		};
+		workflowModule.setConfig(config);
+		workflowModule.executeWorkFlow(config.workFlows.TestCase, {outputVars:['hasWorkflowDirectory']}, function(result) {
+			assert.equal(result.outputVars.hasWorkflowDirectory, true);
+			done();
+		});
+    });
+
 	it('should run the configured exception handler and stop the remaining steps', function(done) {
 		var config = {
 			workFlows : {
