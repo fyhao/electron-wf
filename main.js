@@ -64,10 +64,9 @@ const template = [
 			{
 				label : 'Edit config',
 				click : function() {
-					dialog.showOpenDialog(function (fileNames) {
-						if(typeof fileNames === 'undefined') return;
-						var configFile;
-						configFile = fileNames[0];
+					dialog.showOpenDialog({ properties: ['openFile'] }).then(function (result) {
+						if (result.canceled || result.filePaths.length === 0) return;
+						var configFile = result.filePaths[0];
 						editor.createEditWindow({configFile:configFile});
 					});
 					
@@ -76,12 +75,10 @@ const template = [
 			{
 				label : 'Load config',
 				click : function() {
-					dialog.showOpenDialog(function (fileNames) {
-						if(typeof fileNames === 'undefined') return;
-						var configFile;
-						configFile = fileNames[0];
-						openWorkflowFile(template, configFile)
-						
+					dialog.showOpenDialog({ properties: ['openFile'] }).then(function (result) {
+						if (result.canceled || result.filePaths.length === 0) return;
+						var configFile = result.filePaths[0];
+						openWorkflowFile(template, configFile);
 					});
 					
 				}
