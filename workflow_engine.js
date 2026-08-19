@@ -82,7 +82,7 @@ var executeWorkFlow = function(wf, opts, donefn) {
 	ctx.config = config;
 	ctx.opts = opts;
 	
-	if(typeof GLOBAL_LASTCONFIGFILE !== 'undefined') {
+	if(GLOBAL_LASTCONFIGFILE) {
 		ctx.vars['__dirname'] = path.dirname(GLOBAL_LASTCONFIGFILE);
 	}
 	else {
