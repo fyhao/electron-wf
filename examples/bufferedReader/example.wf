@@ -1,0 +1,15 @@
+module.exports = {
+	workFlows : {
+		ReadAccessLog : {
+			showInMenu:true,
+			steps:[
+				{type:'bufferedReader', file:'access.log', wf:'ProcessLine', outputVar:'selectedLine', outputFile:'selected.log'}
+			]
+		},
+		ProcessLine : {
+			steps:[
+				{type:'evaljs', var:'selectedLine', code:'vars.line.indexOf("ERROR") >= 0 ? vars.line : ""'}
+			]
+		}
+	}
+};
