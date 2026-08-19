@@ -10,6 +10,7 @@ describe('workflow_engine.js', function() {
   this.timeout(15000);
   describe('bootstrap', function() {
     it('set Step module', function() {
+		stepModule.bootstrap();
 		workflowModule.setStepModule(stepModule);
     });
   });
