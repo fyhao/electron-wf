@@ -9,4 +9,7 @@ require('./testWorkflowEngine.js');
 require('./testSelectFile.js');
 require('./testCli.js');
 require('./testParallel.js');
+require('./testBufferedReader.js');
+require('./testOracle.js');
+require('./testMockSshServer.js');
 //require('./testTemp.js');
